@@ -1,0 +1,176 @@
+set_cat_litter_changed_to_today:
+  alias: Set Cat Litter Changed to Today
+  sequence:
+  - service: input_datetime.set_datetime
+    target:
+      entity_id: input_datetime.cat_litter_replaced
+    data:
+      datetime: '{{ now().strftime(''%Y-%m-%d %H:%M:%S'') }}'
+  - service: input_datetime.set_datetime
+    target:
+      entity_id: input_datetime.cat_litter_replace_next
+    data:
+      datetime: '{{ (now() + timedelta(days=21)).strftime(''%Y-%m-%d %H:%M:%S'') }}'
+  mode: single
+s_2:
+  alias: Say Hello Office
+  sequence:
+  - service: notify.alexa_media_office_echo_dot
+    data:
+      message: <amazon:effect name='whispered'>I am whispering this.</amazon:effect>
+      target: media_player.office_echo_dot
+      data:
+        type: tts
+  mode: single
+feed_the_cat_script:
+  alias: Feed the cat
+  sequence:
+  - type: turn_on
+    device_id: 6d62eaa54b50998824c1530efb43bd17
+    entity_id: switch.plug_3
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 4
+      milliseconds: 0
+  - type: turn_off
+    device_id: 6d62eaa54b50998824c1530efb43bd17
+    entity_id: switch.plug_3
+    domain: switch
+  mode: single
+play_song_for_rome_on_kid_1_echo_dot:
+  alias: !secret kid_1_bedtime_song_alias
+  sequence:
+  - service: !secret kid_1_alexa_notify_service 
+    data:
+      message: !secret kid_1_alexa_bedtime_message
+      data:
+        type: tts
+  - service: media_player.play_media
+    data:
+      media_content_id: Song For Rome by Brian Crain
+      media_content_type: AMAZON_MUSIC
+    target:
+      device_id: 897ec3529a673b81e2a408068cc03811
+  mode: single
+play_classical_piano_in_kitchen:
+  alias: Play Classical Piano in Kitchen
+  sequence:
+  - service: media_player.play_media
+    data:
+      media_content_id: Classical Piano
+      media_content_type: AMAZON_MUSIC
+    target:
+      device_id: 42c804acf75899cc92efe1957f50bb6e
+  mode: single
+shut_down_for_the_night:
+  alias: Shut down for the night
+  sequence:
+  - type: turn_off
+    device_id: 3aa638405805f8bd01701013aaf05125
+    entity_id: switch.shelly_bedroom_light
+    domain: switch
+    enabled: false
+  - device_id: 2bf0bbb1497555812687e5e86127fadc
+    domain: cover
+    entity_id: cover.garage_door_2
+    type: close
+  - device_id: 64d671a5d486699f63d500f4c0bc6d9c
+    domain: cover
+    entity_id: cover.garage_door_1
+    type: close
+  - type: turn_off
+    device_id: 0a98806df46c17adf79df83af5a2f451
+    entity_id: remote.garage_roku_express_4k
+    domain: remote
+  - type: turn_off
+    device_id: d7c255965b2f1fc0dbdcd3078dda373f
+    entity_id: remote.groku
+    domain: remote
+    enabled: false
+  - type: turn_off
+    device_id: e7c83f135175e900b949bca3c7e09934
+    entity_id: light.office_spot_lights
+    domain: light
+  - type: turn_off
+    device_id: ecba7d7b16331751f9a7c799f1ef5ec9
+    entity_id: light.tasmota
+    domain: light
+  - type: turn_on
+    device_id: dd5b8d74b7a448094d60f928b8fc3516
+    entity_id: switch.g4_doorbell_privacy_mode
+    domain: switch
+  - type: turn_off
+    device_id: dd5b8d74b7a448094d60f928b8fc3516
+    entity_id: switch.g4_doorbell_system_sounds
+    domain: switch
+  - if:
+    - condition: state
+      attribute: brightness
+      state: '> 0'
+      entity_id: light.basement_game_area_main_lights
+    then:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.game_room_dim
+      metadata: {}
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 2
+        milliseconds: 0
+    - device_id: 4a29da87843f32fde56e6bd55b600bf5
+      domain: light
+      entity_id: light.basement_game_area_main_lights
+      type: brightness_increase
+  mode: single
+toggle_garage_1_button:
+  alias: Toggle garage 1 button
+  sequence:
+  - type: turn_on
+    device_id: 62025bd749666da1bd82c9eadb9f5dfa
+    entity_id: switch.garage_1
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - type: turn_off
+    device_id: 62025bd749666da1bd82c9eadb9f5dfa
+    entity_id: switch.garage_1
+    domain: switch
+  mode: single
+toggle_garage_2_button:
+  alias: Toggle garage 2 button
+  sequence:
+  - type: turn_on
+    device_id: 7b1a06bd4ebf3985240a0ddc2e492b63
+    entity_id: switch.garage_2
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - type: turn_off
+    device_id: 7b1a06bd4ebf3985240a0ddc2e492b63
+    entity_id: switch.garage_2
+    domain: switch
+  mode: single
+scan_the_printer:
+  alias: scan the printer
+  sequence:
+  - service: shell_command.run_scan_document
+    data: {}
+  mode: single
+run_the_roomba:
+  alias: Run the roomba
+  sequence:
+  - device_id: bec831ac7bed6decf1a53a8312835b91
+    domain: vacuum
+    entity_id: vacuum.bender
+    type: clean
+  mode: single
+  icon: mdi:robot-vacuum

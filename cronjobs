@@ -1,0 +1,7 @@
+
+# Run a daily backup at 1 AM
+0 1 * * * root tar -czf /home/brian/backups/home_lab_backup-$(date -I'minutes').tar /home/brian/git/home_lab/ 2>&1 /var/log/cronjobs.log
+
+# Clean up the backups of the homelab
+0 0 * * * root /home/brian/git/home_lab/scripts/cleanup_backups.sh /home/brian/backups 2>&1 /var/log/cronjobs.log
+

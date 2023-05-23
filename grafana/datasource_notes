@@ -1,0 +1,14 @@
+mysql on NAS:
+host: IP address:port
+database: db_name
+user: db_user
+password: db_password
+
+influxdb on NAS:
+query lang: influxQL
+url: http://ipaddress:port
+database: db_name
+user: db_username
+password: db_password
+HTTP Method: POST
+

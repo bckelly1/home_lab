@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "input_datetime",
+  "data": {
+    "items": [
+      {
+        "id": "roomba_schedule_helper",
+        "has_time": true,
+        "has_date": true,
+        "name": "Roomba Schedule Helper",
+        "icon": "mdi:robot-vacuum"
+      },
+      {
+        "has_time": false,
+        "has_date": true,
+        "name": "Cat litter replaced",
+        "icon": "hass:emoticon-poop",
+        "id": "cat_litter_replaced"
+      },
+      {
+        "has_time": false,
+        "has_date": true,
+        "name": "Air gapped back up performed",
+        "icon": "hass:data",
+        "id": "air_gapped_back_up_performed"
+      },
+      {
+        "has_time": false,
+        "has_date": true,
+        "name": "Cat litter replace next",
+        "icon": "hass:emoticon-poop",
+        "id": "cat_litter_replace_next"
+      },
+      {
+        "name": "Roborock Schedule Helper",
+        "has_date": true,
+        "icon": "mdi:robot-vacuum",
+        "has_time": true,
+        "id": "roborock_schedule_helper"
+      }
+    ]
+  }
+}

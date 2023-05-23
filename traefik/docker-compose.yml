@@ -1,0 +1,144 @@
+version: "3.9"
+ 
+########################### NETWORKS
+# You may customize the network subnet (192.168.90.0/24) below as you please.
+# Docker Compose version 3.5 or higher required to define networks this way.
+ 
+networks:
+  default:
+    driver: bridge
+  traefik_net:
+    name: $TRAEFIK_NET
+ 
+########################### EXTENSION FIELDS
+# Helps eliminate repetition of sections
+# More Info on how to use this: https://github.com/htpcBeginner/docker-traefik/pull/228
+ 
+# Common environment values
+x-environment: &default-tz-puid-pgid
+  TZ: America/Denver
+  PUID: 1000
+  PGID: 1000
+ 
+# Keys common to some of the core services that we always to automatically restart on failure
+x-common-keys-core: &common-keys-core
+  networks:
+    - traefik_net
+  security_opt:
+    - no-new-privileges:true
+  restart: always
+ 
+# Keys common to some of the dependent services/apps
+x-common-keys-apps: &common-keys-apps
+  networks:
+    - traefik_net
+  security_opt:
+    - no-new-privileges:true
+  restart: unless-stopped
+ 
+# Keys common to some of the services in media-services.txt
+x-common-keys-media: &common-keys-media
+  networks:
+    - traefik_net
+  security_opt:
+    - no-new-privileges:true
+  restart: "no"
+ 
+########################### SERVICES
+services: 
+  ############################# FRONTENDS
+  # Traefik 2 - Reverse Proxy
+  traefik:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    container_name: traefik
+    image: traefik:2.7
+    command: # CLI arguments
+      - --global.checkNewVersion=true
+      - --global.sendAnonymousUsage=true
+      - --entryPoints.http.address=:80
+      - --entryPoints.https.address=:443
+      # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
+      #- --entrypoints.https.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22
+      - --entryPoints.traefik.address=:8080
+      - --api=true
+      - --api.insecure=true
+      - --api.dashboard=true
+      # - --serversTransport.insecureSkipVerify=true
+      - --log=true
+      - --log.filePath=/logs/traefik.log
+      - --log.level=INFO # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
+      - --accessLog=true
+      - --accessLog.filePath=/logs/access.log
+      - --accessLog.bufferingSize=100 # Configuring a buffer of 100 lines
+      - --accessLog.filters.statusCodes=204-299,400-499,500-599
+      - --providers.docker=true
+      - --providers.docker.endpoint=unix:///var/run/docker.sock # Use Docker Socket Proxy instead for improved security
+      # - --providers.docker.endpoint=tcp://socket-proxy:2375 # Use this instead of the previous line if you have socket proxy.
+      - --providers.docker.exposedByDefault=false
+      - --entrypoints.https.http.tls.options=tls-opts@file
+      # Add dns-cloudflare as default certresolver for all services. Also enables TLS and no need to specify on individual services
+      - --entrypoints.https.http.tls.certresolver=$CERT_RESOLVER
+      - --entrypoints.https.http.tls.domains[0].main=$MY_DOMAIN
+      - --entrypoints.https.http.tls.domains[0].sans=*.$MY_DOMAIN
+      # - --entrypoints.https.http.tls.domains[1].main=$DOMAINNAME2 # Pulls main cert for second domain
+      # - --entrypoints.https.http.tls.domains[1].sans=*.$DOMAINNAME2 # Pulls wildcard cert for second domain
+      - --providers.docker.network=$TRAEFIK_NET
+      - --providers.docker.swarmMode=false
+      - --providers.file.directory=/rules # Load dynamic configuration from one or more .toml or .yml files in a directory
+      # - --providers.file.filename=/path/to/file # Load dynamic configuration from a file
+      - --providers.file.watch=true # Only works on top level files in the rules folder
+      #- --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory # LetsEncrypt Staging Server - uncomment when testing
+      - --certificatesResolvers.$CERT_RESOLVER.acme.email=$MY_EMAIL
+      - --certificatesResolvers.$CERT_RESOLVER.acme.storage=/acme.json
+      - --certificatesResolvers.$CERT_RESOLVER.acme.dnsChallenge.provider=cloudflare
+      - --certificatesResolvers.$CERT_RESOLVER.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesResolvers.$CERT_RESOLVER.acme.dnsChallenge.delayBeforeCheck=90 # To delay DNS check and reduce LE hitrate
+    networks:
+      - traefik_net
+        #ipv4_address: 192.168.90.254 # You can specify a static IP
+    # networks:
+    #  - t2_proxy
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+      #- target: 8080 # insecure api wont work
+      #  published: 8080
+      #  protocol: tcp
+      #  mode: host
+    environment:
+      - CF_API_EMAIL=$MY_EMAIL
+      - CF_API_KEY=$CF_API_KEY
+      - DOMAINNAME_CLOUD_SERVER=$MY_DOMAIN # Passing the domain name to the traefik container to be able to use the variable in rules. 
+    volumes:
+      - ./appdata/traefik2/rules/cloudserver:/rules # file provider directory
+      - /var/run/docker.sock:/var/run/docker.sock:ro # If you use Docker Socket Proxy, comment this line out
+      - /home/brian/git/home_lab/traefik/appdata/traefik2/acme/acme.json:/acme.json # cert location - you must create this empty file and change permissions to 600
+      - ./logs/cloudserver/traefik:/logs # for fail2ban or crowdsec
+      - ./shared:/shared
+    labels:
+      - "traefik.enable=true"
+      # HTTP-to-HTTPS Redirect
+      - "traefik.http.routers.web.entrypoints=http"
+      - "traefik.http.routers.web.rule=HostRegexp(`{host:.+}`)"
+      - "traefik.http.routers.web.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # HTTP Routers
+      - "traefik.http.routers.websecure.entrypoints=https"
+      - "traefik.http.routers.websecure.rule=Host(`traefik.$MY_DOMAIN`)"
+      - "traefik.http.routers.websecure.tls=true" # Some people had 404s without this
+      #- "traefik.http.routers.websecure.tls.certresolver=dns-cloudflare" # Comment out this line after first run of traefik to force the use of wildcard certs
+      - "traefik.http.routers.websecure.tls.domains[0].main=$MY_DOMAIN"
+      - "traefik.http.routers.websecure.tls.domains[0].sans=*.$MY_DOMAIN"
+      # - "traefik.http.routers.websecure.tls.domains[1].main=$DOMAINNAME2" # Pulls main cert for second domain
+      # - "traefik.http.routers.websecure.tls.domains[1].sans=*.$DOMAINNAME2" # Pulls wildcard cert for second domain
+      ## Services - API
+      - "traefik.http.routers.websecure.service=api@internal"
+      ## Middlewares
+      #- "traefik.http.routers.websecure.middlewares=chain-basic-auth@file"
+

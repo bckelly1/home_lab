@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "tag",
+  "data": {
+    "items": [
+      {
+        "tag_id": "brian_bedside",
+        "name": "Brian Bedside",
+        "id": "brian_bedside",
+        "last_scanned": "2022-08-20T03:47:33.731355+00:00"
+      }
+    ]
+  }
+}

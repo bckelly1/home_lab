@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace_resources",
+  "data": {
+    "items": [
+      {
+        "url": "/hacsfiles/mini-graph-card/mini-graph-card-bundle.js?hacstag=1512800620110",
+        "type": "module",
+        "id": "521f83536bdf4b4a84bf9a71ab80b32f"
+      },
+      {
+        "url": "/hacsfiles/simple-thermostat/simple-thermostat.js?hacstag=158654878250",
+        "type": "module",
+        "id": "1ce9485f9ecc4b9cbe2a5b083d9e2c63"
+      },
+      {
+        "url": "/hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js?hacstag=142051833044",
+        "type": "module",
+        "id": "1a2648fc1bee403cb65d808455e8e4da"
+      },
+      {
+        "url": "/hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js?hacstag=178921037441",
+        "type": "module",
+        "id": "200f53c7f17b450cbc02a6d6cb3d43d7"
+      },
+      {
+        "url": "/hacsfiles/roku-card/roku-card.js?hacstag=164367214124",
+        "type": "module",
+        "id": "dcdcca70c2b84509a7811c4ff24274ad"
+      },
+      {
+        "url": "/hacsfiles/lovelace-valetudo-map-card/valetudo-map-card.js?hacstag=2030361082022120",
+        "type": "module",
+        "id": "2aaba9b99138415b99f4001561b2d720"
+      }
+    ]
+  }
+}

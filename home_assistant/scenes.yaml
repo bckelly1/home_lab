@@ -1,0 +1,38 @@
+- id: '1625343909261'
+  name: Living room lights on
+  entities:
+    light.dining_room_lights:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 254
+      color_temp: 391
+      entity_id:
+      - light.hue_1_level_light_color_on_off
+      - light.hue_2_level_light_color_on_off
+      - light.hue_3_level_light_color_on_off
+      - light.tasmota
+      friendly_name: Dining Room Lights
+      icon: mdi:lightbulb-group
+      supported_features: 44
+      state: 'on'
+  icon: hass:bulb
+- id: '1664252230629'
+  name: Game room dim
+  entities:
+    light.basement_game_area_main_lights:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 7
+      device_id: '2'
+      zone_id: '1'
+      friendly_name: Basement Game Area Main Lights
+      supported_features: 32
+      state: 'on'
+  metadata: {}

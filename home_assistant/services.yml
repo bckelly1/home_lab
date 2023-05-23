@@ -1,0 +1,17 @@
+service: notify.alexa_media_office_echo_dot
+data:
+  target: media_player.office_echo_dot
+  message: Hello
+  data:
+    type: tts
+
+
+service: media_player.play_media
+data:
+  media_content_id: amzn_sfx_doorbell_chime_01
+  media_content_type: sound
+target:
+  entity_id: media_player.office_echo_dot
+
+
+

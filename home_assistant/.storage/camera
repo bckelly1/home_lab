@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "minor_version": 1,
+    "key": "camera",
+    "data": {
+        "camera.generic_camera": {
+            "preload_stream": true
+        },
+        "camera.baby_cam": {
+            "preload_stream": true
+        },
+        "camera.g3_flex": {
+            "preload_stream": true
+        },
+        "camera.doorbell": {
+            "preload_stream": true
+        },
+        "camera.g4_doorbell_high": {
+            "preload_stream": true
+        }
+    }
+}

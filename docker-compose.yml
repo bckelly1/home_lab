@@ -1,0 +1,448 @@
+version: '3.8'
+services:
+  bitwarden:
+    container_name: bitwarden
+    environment:
+      DATABASE_URL: ${BITWARDEN_DB_URL}
+    image: vaultwarden/server:latest
+    restart: always
+    volumes:
+      - ./bitwarden/data:/data
+    labels:
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.enable=true"
+      - "traefik.http.routers.bitwarden.rule=Host(`bitwarden.$MY_DOMAIN`)"
+      - "traefik.http.routers.bitwarden.tls.certresolver=dns-cloudflare"
+    networks:
+      - $DEFAULT_NETWORK
+
+  chronograf:
+    container_name: chronograf
+    image: chronograf:latest
+    restart: unless-stopped
+    volumes:
+      - ./chronograf/data:/var/lib/chronograf
+    environment:
+      - INFLUXDB_URL=http://${DATABASE_HOSTNAME}:8086
+      - INFLUXDB_USERNAME=${INFLUXDB_ADMIN_USER}
+      - INFLUXDB_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.chronograf.rule=Host(`chronograf.$MY_DOMAIN`)"
+      - "traefik.http.routers.chronograf.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.chronograf.loadbalancer.server.port=8888"
+    networks:
+      - $DEFAULT_NETWORK
+
+  change_detection:
+    container_name: change_detection
+    image: dgtlmoon/changedetection.io
+    restart: unless-stopped
+    volumes:
+      - ./change_detection/:/datastore
+    hostname: change-detection.$MY_DOMAIN
+    environment:
+      - BASE_URL=change-detection.$MY_DOMAIN
+      - NAME="Change Detection"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.change_detection.rule=Host(`change-detection.$MY_DOMAIN`)"
+      - "traefik.http.routers.change_detection.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.change_detection.loadbalancer.server.port=5000"
+    dns: ${DATABASE_HOSTNAME}
+    networks:
+      - $DEFAULT_NETWORK
+
+  cloudflare-ddns:
+    image: oznu/cloudflare-ddns:latest
+    container_name: cloudflare_ddns
+    restart: always
+    environment:
+      - API_KEY=$CLOUDFLARE_API_KEY
+      - ZONE=$MY_DOMAIN
+      - PROXIED=false
+
+  ghost:
+    container_name: ghost
+    image: ghost:4-alpine
+    restart: unless-stopped
+    environment:
+      # see https://ghost.org/docs/config/#configuration-options
+      database__client: mysql
+      database__connection__host: ${DATABASE_HOSTNAME}
+      database__connection__user: ${GHOST_DB_USERNAME}
+      database__connection__password: ${GHOST_DB_PASSWORD}
+      database__connection__database: ghost
+      url: "https://blog.$MY_DOMAIN"
+      mail__transport: "SMTP"
+      mail__options__service: "Gmail"
+      mail__options__host: smtp-relay.gmail.com
+      mail__options__port: 465
+      mail__options__secure: true
+      mail__options__auth__user: ${GMAIL_EMAIL}
+      mail__options__auth__pass: ${GMAIL_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.ghost.rule=Host(`blog.$MY_DOMAIN`)"
+      - "traefik.http.routers.ghost.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.ghost.loadbalancer.server.port=2368"
+    networks:
+      - $DEFAULT_NETWORK
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    user: "1000"
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/logs:/logs
+    environment:
+      GF_SERVER_ROOT_URL: "http://grafana.${MY_DOMAIN}"
+      GF_SERVER_DOMAIN: "grafana.${MY_DOMAIN}"
+      GF_SECURITY_ADMIN_USER: "${GRAFANA_USERNAME}"
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD}"
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,natel-discrete-panel,grafana-piechart-panel"
+      GF_PATHS_LOGS: "/logs"
+      GF_LOG_MODE: "console file"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.$MY_DOMAIN`)"
+      - "traefik.http.routers.grafana.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    networks:
+      - $DEFAULT_NETWORK
+
+  home_assistant:
+    container_name: home_assistant
+    restart: unless-stopped
+    #image: homeassistant/home-assistant:2023.2
+    image: homeassistant/home-assistant:2023.3
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+      - /dev/ttyUSB1:/dev/ttyUSB1
+      - /dev/ttyACM0:/dev/ttyACM0
+    volumes:
+      - ./home_assistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - ./home_assistant/shared:/shared
+      - /dev/serial/by-id/:/dev/serial/by-id/
+      - scanned_documents:/config/scanned_documents
+      - cifs_document_backup:/config/cifs_backup
+    privileged: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.home_assistant.rule=Host(`home-assistant.$MY_DOMAIN`)"
+      - "traefik.http.routers.home_assistant.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.home_assistant.loadbalancer.server.port=8123"
+    networks:
+      - nut_server
+      - $DEFAULT_NETWORK
+      - home_assistant_services
+
+  homer:
+    image: b4bz/homer:latest
+    restart: always
+    container_name: homer
+    volumes:
+      - ./homer/data:/www/assets
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.homer.rule=Host(`homer.$MY_DOMAIN`)"
+      - "traefik.http.routers.homer.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.homer.loadbalancer.server.port=8080"
+    networks:
+      - $DEFAULT_NETWORK
+
+  mosquitto:
+    container_name: mosquitto
+    restart: unless-stopped
+    image: eclipse-mosquitto 
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    network_mode: host
+
+  netdata:
+    container_name: netdata
+    restart: always
+    image: netdata/netdata:latest
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor=unconfined
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.netdata.rule=Host(`netdata.$MY_DOMAIN`)"
+      - "traefik.http.routers.netdata.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.netdata.loadbalancer.server.port=19999"
+    volumes:
+      - netdata_config:/etc/netdata
+      - netdata_lib:/var/lib/netdata
+      - netdata_cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /etc/os-release:/host/etc/os-release:ro
+    networks:
+      - $DEFAULT_NETWORK
+
+  nut_server:
+    container_name: nut_server
+    image: instantlinux/nut-upsd:latest
+    restart: always
+    ports:
+      - "3493:3493"
+    environment:
+      - SERIAL=4B2027P52290
+    privileged: true
+    devices:
+      - /dev/ttyUSB1:/dev/ttyUSB1
+    secrets:
+      - nut-upsd-password
+    networks:
+      - nut_server
+
+  paperless:
+    container_name: paperless
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    security_opt:
+      - apparmor=unconfined
+    volumes:
+      - ./paperless/data:/usr/src/paperless/data
+      - ./paperless/media:/usr/src/paperless/media
+      - ./paperless/export:/usr/src/paperless/export
+      - scanned_documents:/usr/src/paperless/consume
+    environment:
+      PAPERLESS_REDIS: redis://redis:6379
+      PAPERLESS_DBHOST: $DATABASE_HOSTNAME
+      PAPERLESS_DBPORT: 3306
+      PAPERLESS_DBUSER: $PAPERLESS_DB_USER
+      PAPERLESS_DBPASS: $PAPERLESS_DB_PASSWORD
+      PAPERLESS_DBENGINE: mariadb
+      PAPERLESS_URL: https://paperless.$MY_DOMAIN
+      PAPERLESS_CONSUMER_RECURSIVE: true
+      PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: true
+      # The UID and GID of the user used to run paperless in the container. Set this
+      # to your UID and GID on the host so that you have write access to the
+      # consumption directory.
+      USERMAP_UID: 1000
+      USERMAP_GID: 100
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+      - "traefik.http.routers.paperless.rule=Host(`paperless.$MY_DOMAIN`)"
+      - "traefik.http.routers.paperless.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+    networks:
+      - $DEFAULT_NETWORK
+
+  portainer:
+    image: cr.portainer.io/portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer/data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+      #- "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.$MY_DOMAIN`)"
+      - "traefik.http.routers.portainer.tls.certresolver=dns-cloudflare"
+      - "traefik.http.routers.portainer.service=portainer"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    networks:
+      - $DEFAULT_NETWORK
+
+  # Currently only used for Paperless, unknown if it can be used elsewhere
+  redis:
+    container_name: redis
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    volumes:
+      - ./redis/data:/data
+    networks:
+      - $DEFAULT_NETWORK
+
+  retroarch:
+    image: inglebard/retroarch-web
+    container_name: retroarch
+    volumes:
+      - ./retroarch/data:/var/www/html/assets/cores/games
+      - "/mnt/nas/Games:/var/www/html/assets/cores/nas"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+      - "traefik.http.routers.retroarch.rule=Host(`games.$MY_DOMAIN`)"
+      - "traefik.http.routers.retroarch.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.retroarch.loadbalancer.server.port=80"
+    networks:
+      - $DEFAULT_NETWORK
+
+  tandoori:
+    container_name: tandoori
+    image: vabene1111/recipes
+    restart: unless-stopped
+    volumes:
+      - ./tandoori/staticfiles:/opt/recipes/staticfiles
+      - ./tandoori/mediafiles:/opt/recipes/mediafiles
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.tandoori.rule=Host(`tandoori.$MY_DOMAIN`)"
+      - "traefik.http.routers.tandoori.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.tandoori.loadbalancer.server.port=8080"
+    networks:
+      - $DEFAULT_NETWORK
+    environment:
+      - SECRET_KEY=$TANDOOR_SECRET
+      - DB_ENGINE=django.db.backends.postgresql
+      - POSTGRES_HOST=$DATABASE_HOSTNAME
+      - POSTGRES_PORT=5433
+      - POSTGRES_USER=$POSTGRES_TANDOORI_USERNAME
+      - POSTGRES_PASSWORD=$POSTGRES_TANDOORI_PASSWORD
+      - POSTGRES_DB=tandoori
+
+  unifi_poller:
+    container_name: unifi_poller
+    restart: unless-stopped
+    image: golift/unifi-poller:${POLLER_TAG}
+    environment:
+      - UP_INFLUXDB_DB=${INFLUXDB_DB}
+      - UP_INFLUXDB_USER=${INFLUXDB_ADMIN_USER}
+      - UP_INFLUXDB_PASS=${INFLUXDB_ADMIN_PASSWORD}
+      - UP_INFLUXDB_URL=http://${DATABASE_HOSTNAME}:8086
+      - UP_UNIFI_DEFAULT_USER=${UNIFI_USER}
+      - UP_UNIFI_DEFAULT_PASS=${UNIFI_PASS}
+      - UP_UNIFI_DEFAULT_URL=${UNIFI_URL}
+      - UP_POLLER_DEBUG=${POLLER_DEBUG}
+      - UP_UNIFI_DEFAULT_SAVE_DPI=${POLLER_SAVE_DPI}
+
+  uptime_kuma:
+    container_name: uptime_kuma
+    restart: unless-stopped
+    image: louislam/uptime-kuma:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+      - "traefik.http.routers.uptime_kuma.rule=Host(`uptime-kuma.$MY_DOMAIN`)"
+      - "traefik.http.routers.uptime_kuma.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.uptime_kuma.loadbalancer.server.port=3001"
+    volumes:
+      - ./uptime_kuma:/app/data
+    dns:
+      - ${DATABASE_HOSTNAME}
+    networks:
+      - $DEFAULT_NETWORK
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup --schedule "0 7 * * *"
+    restart: unless-stopped
+
+  wireguard:
+    image: ghcr.io/linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+      - SERVERURL=crazycat.${MY_DOMAIN} #optional
+      - SERVERPORT=51820 #optional
+      - PEERS=2 #optional
+      - PEERDNS=auto #optional
+      - INTERNAL_SUBNET=192.168.0.0 #optional
+      - ALLOWEDIPS=0.0.0.0/0 #optional
+    volumes:
+      - ./wireguard/config:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+
+  wyze_bridge:
+    container_name: wyze_bridge
+    restart: always
+    ports:
+      - 1935:1935
+      - 8554:8554
+      - 8888:8888
+      - 5000:5000
+    image: mrlt8/wyze-bridge:latest
+    environment:
+      - WYZE_EMAIL=$WYZE_EMAIL
+      - WYZE_PASSWORD=$WYZE_PASSWORD
+      - ENABLE_AUDIO=true
+      - AUDIO_CODEC=aac
+      - FRESH_DATA=true
+      - SNAPSHOT=RTSP
+      - IMG_DIR=/img/
+
+  baby_sleep_coach:
+    container_name: baby_sleep_coach
+    restart: unless-stopped
+    image: babysleepcoach
+    environment:
+      - REACT_APP_BACKEND_URL=http://192.168.0.6:7082
+      - CAM_STREAM_URL=rtsp://192.168.0.6:8554/baby-cam
+      - DEBUG=False
+      - OWL=False
+      - HATCH_IP=127.0.0.1
+    ports:
+      - 7080:80
+      - 7081:81
+      - 7082:8000
+    #volumes:
+    #  - ./babysleepcoach:/usr/app/babysleepcoach
+
+secrets:
+  nut-upsd-password:
+    file: ./secrets/nut_server_secret
+
+networks:
+  traefik_net:
+    name: $DEFAULT_NETWORK
+    external: true
+  home_assistant_services:
+    name: home_assistant_services
+  nut_server:
+    name: nut_server
+
+volumes:
+  scanned_documents:
+
+  cifs_document_backup:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DATABASE_HOSTNAME}/brian-home/scanner_files"
+
+  netdata_config:
+  netdata_lib:
+  netdata_cache:
+

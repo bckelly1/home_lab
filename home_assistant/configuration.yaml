@@ -1,0 +1,142 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+homeassistant:
+  whitelist_external_dirs:
+    - /config/photos/
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+bhyve:
+  username: !secret bhyve_username
+  password: !secret bhyve_password
+
+input_select:
+  destination:
+    name: destination
+    options:
+      - Home
+      - Work
+      - Parents
+
+sensor:
+  - platform: bhyve
+
+  #Broncos Next Up Date
+  - platform: template
+    sensors:
+      broncos_date:
+        #entity_id: calendar.denver_broncos
+        friendly_name: Broncos next game
+        value_template: >-
+          {% if is_state('calendar.denver_broncos', 'on') %}
+            Playing Now
+          {% else %}
+            {% set st = state_attr('calendar.denver_broncos', 'start_time') %}
+            {% if st != None %}
+              {{ as_timestamp(st)  | timestamp_custom("%A, %b %d at %-I:%M %p") }}
+            {% else %}
+              No games scheduled
+            {% endif %}
+          {% endif %}
+
+  # Broncos Next Opponent
+  - platform: template
+    sensors:
+      broncos_opponent:
+        #entity_id: calendar.denver_broncos
+        friendly_name: Broncos Next Opponent
+        value_template: >-
+          {{ states.calendar.denver_broncos.attributes.message }}
+
+switch:
+  - platform: bhyve
+
+#fastdotcom:
+#  scan_interval:
+#      minutes: 300
+
+light:
+  - platform: group
+    name: Dining Room Lights
+    entities:
+      - light.tasmota
+
+frontend:
+  themes:
+    happy:
+      primary-color: pink
+      text-primary-color: purple
+      mdc-theme-primary: plum
+    sad:
+      primary-color: steelblue
+      modes:
+        dark:
+          secondary-text-color: slategray
+    day_and_night:
+      primary-color: coral
+      modes:
+        light:
+          secondary-text-color: olive
+        dark:
+          secondary-text-color: slategray
+
+tplink:
+  discovery: false
+  switch:
+    - host: 192.168.2.14
+    - host: 192.168.2.15
+    - host: 192.168.2.16
+    - host: 192.168.2.17
+
+
+notify:
+  - name: ecobee_notification
+    platform: ecobee
+  - name: gmail_notification
+    platform: smtp
+    sender: !secret home_assistant_smtp_email
+    recipient: !secret home_assistant_smtp_email
+    server: smtp.gmail.com
+    username: !secret home_assistant_smtp_username
+    password: !secret home_assistant_smtp_password
+    sender_name: Home Assistant
+
+shell_command:
+  mount_nas_folder: !secret nas_mount_command
+  run_scan_document: python3 /config/custom_scripts/scan_document.py
+
+lutron_caseta:
+  host: 192.168.0.8
+  keyfile: ./caseta_certs/caseta.key
+  certfile: ./caseta_certs/caseta.crt
+  ca_certs: ./caseta_certs/caseta-bridge.crt
+
+recorder:
+  db_url: !secret mysql_url
+
+vizio:
+  - host: "192.168.2.20:7345"
+    access_token: !secret vizio_auth_token
+
+http:
+  server_port: 8123
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.0.240
+    - 172.31.0.0/24
+    - 172.21.0.0/24
+    - 172.20.0.0/24
+    - 127.0.0.0/24
+
+
+
+
+
