@@ -20,7 +20,6 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 ## Services:
 * [adguard](https://github.com/AdguardTeam/AdGuardHome) - Home DNS Server. Blocks ads, custom domains/subdomains, rewrites URLs as necessary.
 * [bitwarden](https://github.com/dani-garcia/vaultwarden) - Home Password manager
-* [chronograf](https://github.com/influxdata/chronograf) - Views of contents in the influx db. Should probably be demoted, I never use it.
 * [change_detection](https://github.com/dgtlmoon/changedetection.io) - Watches for changes on websites
 * [cloudflare-ddns](https://github.com/timothymiller/cloudflare-ddns) - Automatically updates my public DNS record with my public IP.
 * [ghost](https://hub.docker.com/_/ghost) - Home blog
@@ -33,14 +32,12 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * [paperless](https://github.com/paperless-ngx/paperless-ngx) - Optical Character Recognition tools used for tagging and cataloging documents (PDF, Word, Excel, etc)
 * [portainer](https://github.com/portainer/portainer) - Monitors the health, status and configuration of all Docker containers.
 * [redis](https://github.com/redis/redis) - Caching system for paperless
-* [retroarch](https://github.com/BinBashBanana/webretro) - Retro game emulation tool. Works acceptably in the browser for many games, have not got it to work for DosBox. Should probably be demoted.
 * [tandoori](https://github.com/TandoorRecipes/recipes) - Recipe manager! All Interesting recipes are saved here.
 * [unifi_poller](https://github.com/unpoller/unpoller) - Monitors every metric possible from the Unifi Dream Machine Pro. Client metrics, Deep Packet Inspection, total network traffic, etc.
 * [uptime_kuma](https://github.com/louislam/uptime-kuma) - Monitors all home services (docker containers) as well as any external websites.
 * [watchtower](https://github.com/containrrr/watchtower) - Automatically keeps all docker containers up to date with the latest released images.
 * [wireguard](https://github.com/linuxserver/docker-wireguard) - VPN.
 * [wyze_bridge](https://github.com/mrlt8/docker-wyze-bridge) - Allows for local control and monitoring of all Wyze devices (cameras)
-* [baby_sleep_coach](https://github.com/calebolson123/BabySleepCoach) - Experiment for monitoring the sleep/hungry status of a child. Mostly an experiment, should be moved until it is refined.
 
 
 * [traefik](https://github.com/traefik/traefik) - network proxy. Allows all services to share an HTTP endpoint (80/443) rather than all services running on their own ports/colliding. It also manages SSL for all services that are connected.

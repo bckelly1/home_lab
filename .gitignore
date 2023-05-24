@@ -87,6 +87,7 @@
 /traefik/config/private.pem
 /traefik/letsencrypt/
 /traefik/logs/
+/traefik/appdata/
 
 # Mosquitto -- private info in only useful file
 /mosquitto/
@@ -103,4 +104,10 @@
 
 # Wireguard -- all sensitive info
 /wireguard/
+
+# Paperless - no custom config, ignore all
+/paperless/
+
+# Tandoori - no custom config, ignore all
+/tandoori/
 
