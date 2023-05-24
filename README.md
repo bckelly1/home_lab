@@ -10,6 +10,7 @@ You will need to spin up a MySQL Database and a Postgres Database. MySQL is used
 
 The final step is you need to register your subdomains with DNS. I use AdGuard as a DNS server as well as an ad blocker. After you set up one of these services you need to register it with AdGuard (or PiHole, or whatever you're using for DNS). Basically:
 `subdomain.maindomain.com=<ip address of traefik server>`
+Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 
 ## Prerequisites:
 * Cloudflare DNS

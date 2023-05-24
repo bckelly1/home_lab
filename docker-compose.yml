@@ -120,7 +120,7 @@ services:
   home_assistant:
     container_name: home_assistant
     restart: unless-stopped
-    #image: homeassistant/home-assistant:2023.2
+    # This image is referenced mostly statically. It updates pretty quickly and has frequent breaking changes. Review the documentation before upgrading.
     image: homeassistant/home-assistant:2023.3
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0

@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:13
+    ports:
+      # This port has been moved because Synology NAS uses port 5432 by default but does not expose it to consumer use.
+      - 5433:5432
+    restart: unless-stopped
+    volumes: 
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_USER_PASSWORD=$MYSQL_USER_PASSWORD
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
