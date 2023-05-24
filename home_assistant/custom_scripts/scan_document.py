@@ -4,6 +4,10 @@ import time
 import uuid
 import os
 
+# This script calls the HP Printer and triggers a scan job. The scanner then sends a completed PDF back to the script.
+# This is intended to be called from within Home Assistant (Python-based). It takes the scanned PDF and sends it to both Paperless and the NAS backup
+# After it copies the files it then cleans up the file
+
 
 type = "Pdf"
 

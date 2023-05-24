@@ -16,6 +16,7 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * Cloudflare DNS
 * You own a domain name that is configured in Cloudflare.
 * Know a little bit about Docker
+* *Optional*: NAS uses a CIFS Share. If you don't want to do a CIFS share, remove the cifs_document_backup volume from home_assistant.
 
 ## Services:
 * [adguard](https://github.com/AdguardTeam/AdGuardHome) - Home DNS Server. Blocks ads, custom domains/subdomains, rewrites URLs as necessary.
@@ -40,7 +41,8 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * [wyze_bridge](https://github.com/mrlt8/docker-wyze-bridge) - Allows for local control and monitoring of all Wyze devices (cameras)
 
 
-* [traefik](https://github.com/traefik/traefik) - network proxy. Allows all services to share an HTTP endpoint (80/443) rather than all services running on their own ports/colliding. It also manages SSL for all services that are connected.
+* [traefik](https://github.com/traefik/traefik) - network proxy. Allows all services to share an HTTP endpoint (80/443) rather than all services running on their own ports/colliding. It also manages SSL for all services that are connected
+
 
 ### Labels
 In every docker service there is a section called labels. This is how the container "registers" with traefik to use SSL and get it's connection proxied. You need four labels for every service:

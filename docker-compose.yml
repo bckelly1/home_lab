@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+  # Password Manager
   bitwarden:
     container_name: bitwarden
     environment:
@@ -383,8 +384,10 @@ networks:
     name: nut_server
 
 volumes:
+  # Used to share documents between home_assistant and paperless
   scanned_documents:
 
+  # Backs up documents to the NAS for more permanent storage
   cifs_document_backup:
     driver_opts:
       type: "cifs"
