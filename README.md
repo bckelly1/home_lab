@@ -38,7 +38,28 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * [cloudflare-ddns](https://github.com/timothymiller/cloudflare-ddns) - Automatically updates my public DNS record with my public IP.
 * [ghost](https://hub.docker.com/_/ghost) - Home blog
 * [grafana](https://github.com/grafana/grafana) - Visualization of data. Primarily for Unifi Poller, but I can monitor Home Assistant devices in more detail in Grafana.
-* [home_assistant](https://github.com/home-assistant/core) - Home automation and monitoring hub. Everything (almost) hooks into Home Assistant for automation and monitoring purposes.
+* [home_assistant](https://github.com/home-assistant/core) - Home automation and monitoring hub. Everything (almost) hooks into Home Assistant for automation and monitoring purposes. Below is a list of my integrations.
+** Adguard - Monitor the ad blocker
+** Alexa - Talk to the Alexa Dots
+** Ecobee - Thermostat
+** Google Calendar
+** HACS - Non-official integrations for Home Assisnt (Community integratons, not from the store)
+** iRobot - Local control of the Roomba
+** Caseta Bridge - Control of the lights
+** MQTT - Messaging broker
+** National Weather Service - Current and future weather
+** NUT Server - Monitoring and control of the Uninterruptible Power Supply (battery backup)
+** Orbit B-Hyve - Irrigation control
+** Plex - Monitoring and control of Plex playback
+** Roku - Control of Roku sticks for TV control
+** Shelly - Wifi based smart switch control
+** Synology DSM - Monitoring the NAS disks
+** Tasmota - Control of the Wifi lights
+** TP-Link Casa - Control fo the Wifi plugs
+** Unifi Network - Monitoring of the network
+** Unifi Protect - Camera integrations
+** Vizio SmartCast - Control fo the TVs
+** HubZ Controller - Zigbee and ZWave control
 * [homer](https://github.com/bastienwirtz/homer) - Main dashboard where I hold links to all of the different services that are running. Glorified bookmark holder in a webpage.
 * [immich](https://github.com/immich-app/immich) - Photo storage assistant. Copies and backs up photos from phones onto the NAS every night. Much like Google Photos or iCloud storage for photos.
 * [mosquitto](https://github.com/eclipse/mosquitto) - MQTT Messaging bus for Home Assistant
@@ -68,6 +89,13 @@ In every docker service there is a section called labels. This is how the contai
 - "traefik.http.services.grafana.loadbalancer.server.port=3000" # What HTTP port the service typically runs on
 ```
 
+## Cronjobs
+Scheduled runs of maintenance tasks, services and scripts. I use it to take manual backups of the entire home_lab directory every night. It isn't active cronjob file, it must be registered with cron in order to operate. You would need to modify the paths inside the scripts too.
+
+## Network Configuration
+* Wifis - All IoT devices are on a segregated network, with forced client isolation. Most IoT devices are not allowed to reach back to the internet.
+* DNS Rewrites - The router is configured to send all clients a custom DNS server as the preferred DNS provider and fallback to quad 9 (9.9.9.9). That allows all clients to not only utilize the Ad Blocker, and connect to the custom DNS services (Bitwarden, Home Assistant, etc).
+
 ## Intended use case notes
 I typically spin up the database and AdGuard/PiHole on a separate server, the most reliable one I have. Things go crazy on the network if the databases or DNS Server go out, so I try to keep them as stable as possible. You can put all of these on one server if you want.
 
@@ -77,6 +105,13 @@ Be careful about running any of these on a Raspberry Pi by itself. The microSD c
 
 ## Suggestions
 I welcome suggestions! I am always looking to improve my stack, configuration and services. Fork the repo, make your change, and open a pull request! If you have a suggestion, put it in a GitHub Issue.
+
+## Future
+- Need to add Plex in here. Currently my Plex is not running in a containerized form so its config would be difficult to check in. This was my first service!
+- Geo trackers - Google kind of gets there but I'm not super pleased with that.
+- Health trackers - Apple probably has the best ones on the market right now but I would prefer a fully local system.
+
+
 
 ## Disclaimer
 I don't own the individual services. I am standing on the shoulders of giants. Thank you to all the services and applications that I have used. I do my best to contribute back where I can for each service.
