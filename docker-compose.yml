@@ -105,9 +105,10 @@ services:
     # This image is referenced mostly statically. It updates pretty quickly and has frequent breaking changes. Review the documentation before upgrading.
     image: homeassistant/home-assistant:2023.3
     devices:
-      - /dev/ttyUSB0:/dev/ttyUSB0
-      - /dev/ttyUSB1:/dev/ttyUSB1
-      - /dev/ttyACM0:/dev/ttyACM0
+      # Pass down the connection to the USB devices into Home Assistant.
+      - /dev/ttyUSB0:/dev/ttyUSB0 # Nortek Z-Wave/Zigbee hub stick
+      - /dev/ttyUSB1:/dev/ttyUSB1 # USB connection to APC UPS. Monitors the UPS, allows for automatic shutdown 
+      - /dev/ttyACM0:/dev/ttyACM0 # Possibly unused
     volumes:
       - ./home_assistant:/config
       - /etc/localtime:/etc/localtime:ro

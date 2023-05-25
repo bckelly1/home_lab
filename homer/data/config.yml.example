@@ -1,0 +1,104 @@
+---
+# Homepage configuration
+# See https://fontawesome.com/icons for icons options
+
+title: "Home dashboard"
+subtitle: "The Main Dashboard"
+logo: "logo.png"
+# icon: "fas fa-skull-crossbones" # Optional icon
+
+header: false
+footer: false
+#footer: '<p>Created with <span class="has-text-danger">❤️</span> with <a href="https://bulma.io/">bulma</a>, <a href="https://vuejs.org/">vuejs</a> & <a href="https://fontawesome.com/">font awesome</a> // Fork me on <a href="https://github.com/bastienwirtz/homer"><i class="fab fa-github-alt"></i></a></p>' # set false if you want to hide it.
+
+# Optional theme customization
+theme: default
+colors:
+  dark:
+    highlight-primary: "#3367d6"
+    highlight-secondary: "#4285f4"
+    highlight-hover: "#5a95f5"
+    background: "#131313"
+    card-background: "#2b2b2b"
+    text: "#eaeaea"
+    text-header: "#ffffff"
+    text-title: "#fafafa"
+    text-subtitle: "#f5f5f5"
+    card-shadow: rgba(0, 0, 0, 0.4)
+    link: "#3273dc"
+    link-hover: "#ffdd57"
+
+links:
+  - name: "Source Code"
+    icon: "fab fa-github"
+    url: "https://github.com/bckelly1/home_lab"
+    target: "_blank" # optional html a tag target attribute
+  # see url field and assets/additionnal-page.yml.dist used in this example:
+  - name: "Google Doc"
+    icon: "fas fa-file-alt"
+    url: "https://docs.google.com/document/d/mydocuemntationdocument"
+    target: "_blank"
+
+# Services
+# First level array represent a group.
+# Leave only a "items" key if not using group (group name, icon & tagstyle are optional, section separation will not be displayed).
+services:
+  - name: "Services"
+    icon: "fas fa-cloud"
+    items:
+      - name: "Home Assistant"
+        subtitle: "Home Assistant"
+        logo: "assets/icons/home_assistant.png"
+        url: "https://home-assistant.exampledomain.com"
+        target: "_blank"
+        tag: "Dashboard"
+      - name: "Grafana"
+        logo: "assets/icons/grafana.png"
+        url: "https://grafana.exampledomain.com"
+        target: "_blank"
+      - name: "Bitwarden"
+        logo: "assets/icons/bitwarden.png"
+        url: "https://bitwarden.exampledomain.com"
+        target: "_target"
+      - name: "Adguard"
+        logo: "assets/icons/adguard.png"
+        url: "http://<adguardIpAddress>:81"
+        target: "_target"
+      - name: "Router"
+        logo: "assets/icons/ubiquiti.png"
+        url: "https://<Router IP address>"
+        target: "_target"
+      - name: "Server Traefik"
+        logo: "assets/icons/traefik.png"
+        url: "http://traefik.setupjustforme.com"
+        target: "_target"
+      - name: "Change Detection"
+        logo: "assets/icons/delta.png"
+        url: "https://change-detection.setupjustforme.com"
+        target: "_target"
+      - name: "Portainer"
+        logo: "assets/icons/portainer.png"
+        url: "https://portainer.setupjustforme.com"
+        target: "_target"
+      - name: "Paperless"
+        logo: "assets/icons/paperless.png"
+        url: "https://paperless.setupjustforme.com"
+        target: "_target"
+      - name: "Ghost (blog)"
+        logo: "assets/icons/ghost.png"
+        url: "https://blog.setupjustforme.com/ghost/#/signin"
+        target: "_target"
+      - name: "Uptime Kuma"
+        logo: "assets/icons/uptime-kuma.svg"
+        url: "https://uptime-kuma.setupjustforme.com"
+        target: "_target"
+      - name: "Tandoori"
+        logo: "assets/icons/tandoori.png"
+        url: "https://tandoori.setupjustforme.com"
+        target: "_target"
+      - name: "Immich"
+        logo: "assets/icons/immich.svg"
+        url: "https://immich.setupjustforme.com"
+        target: "_target"
+
+
