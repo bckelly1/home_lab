@@ -100,3 +100,4 @@ With that said, I can't guarantee that each service is free of vulnerabilities, 
 
 However, I have not had a problem with any of these services. I keep them up to date with Watchtower.
 
+I haven't checked in a lot of my personal configuration because A) it won't make sense because it's tailored to my hardware and B) It either has secrets or I'm not sure if it would expose sensitive info. Reach out to me if you want clarification on something!
