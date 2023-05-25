@@ -59,7 +59,7 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 
 
 ### Labels
-In every docker service there is a section called labels. This is how the container "registers" with traefik to use SSL and get it's connection proxied. You need four labels for every service:
+In every docker service there is a section called labels. This is how the container "registers" with traefik to use SSL and get it's connection proxied. You need five labels for every service:
 ```
 - "traefik.enable=true" # Says yes, I want this service in Traefik
 - "traefik.docker.network=$DEFAULT_NETWORK" # This is the Traefik Network in docker
@@ -67,13 +67,14 @@ In every docker service there is a section called labels. This is how the contai
 - "traefik.http.routers.grafana.tls.certresolver=dns-cloudflare" # What certificate resolver you want Traefik to use.
 - "traefik.http.services.grafana.loadbalancer.server.port=3000" # What HTTP port the service typically runs on
 ```
+Most services are very upfront about what port they use for the UI, but you may need to check the Dockerfile in the service to see what they expose.
 
 ## Cronjobs
 Scheduled runs of maintenance tasks, services and scripts. I use it to take manual backups of the entire home_lab directory every night. It isn't active cronjob file, it must be registered with cron in order to operate. You would need to modify the paths inside the scripts too.
 
 ## Network Configuration
 * Wifis - All IoT devices are on a segregated network, with forced client isolation. Most IoT devices are not allowed to reach back to the internet.
-* DNS Rewrites - The router is configured to send all clients a custom DNS server as the preferred DNS provider and fallback to quad 9 (9.9.9.9). That allows all clients to not only utilize the Ad Blocker, and connect to the custom DNS services (Bitwarden, Home Assistant, etc).
+* DNS Rewrites - The router is configured to send all clients a custom DNS server (AdGuardHome IP Address) as the preferred DNS provider and fallback to quad 9 (9.9.9.9). That allows all clients to not only utilize the Ad Blocker, and connect to the custom DNS services (Bitwarden, Home Assistant, etc).
 
 ## Intended use case notes
 I typically spin up the database and AdGuard/PiHole on a separate server, the most reliable one I have. Things go crazy on the network if the databases or DNS Server go out, so I try to keep them as stable as possible. You can put all of these on one server if you want.
