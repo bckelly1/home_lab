@@ -21,15 +21,18 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * *Optional*: NAS uses a CIFS Share. If you don't want to do a CIFS share, remove the cifs_document_backup volume from home_assistant.
 
 ## Setup Instructions
-1. Fill out the .env file in the root directory as much as you can/want.
-2. Fill out the .env file in the `./traefik` directory
-3. Fill out the `config.yml.example` file in the `./homer` directory. (Create a `config.yml` file).
-3. In the `./traefik` directory, run `docker compose up -d` to create the traefik config.
-4. In the `./databases` directory (which you can run on this server or elsewhere), run `docker compose up -d`.
-5. In the root directory, trim out whatever services you don't want in the `docker-compose.yml` file.
-6. In the root directory, run `docker compose up -d`
-7. In the `./adguard` directory, run `docker compose up -d` and then view `<ip address>:3000` to view the adguard config. Set up any users and additional config. Set up the DNS rewrites for the subdomains in the `docker-compose.yml` in the root directory.
-8. Navigate to `homer.setupjustforme.com`
+1. Fill out these example files:
+- `./.env.example` -> `./.env`
+- `./traefik/.env.example` -> `./traefik/.env`
+- `./homer/config/config.yml.example` -> `./homer/config/config.yml`
+- `./databases/.env.example` -> `./databases/.env`
+- `./adguard/config/AdGuardHome.yml.example` -> `./adguard/config/AdGuardHome.yml`
+2. In the `./traefik` directory, run `docker compose up -d` to create the traefik config.
+3. In the `./databases` directory (which you can run on this server or elsewhere), run `docker compose up -d`.
+4. In the root directory, trim out whatever services you don't want in the `docker-compose.yml` file.
+5. In the root directory, run `docker compose up -d`
+6. In the `./adguard` directory, run `docker compose up -d` and then view `<ip address>:3000` to view the adguard config. Set up any users and additional config. Set up the DNS rewrites for the subdomains in the `docker-compose.yml` in the root directory.
+7. Navigate to `homer.setupjustforme.com`
 
 ## Services:
 * [adguard](https://github.com/AdguardTeam/AdGuardHome) - Home DNS Server. Blocks ads, custom domains/subdomains, rewrites URLs as necessary.
@@ -84,7 +87,7 @@ I would not suggest putting all of these on a Raspberry Pi, unless you are worki
 Be careful about running any of these on a Raspberry Pi by itself. The microSD card in the Raspberry pi isn't made for the logging from the services. When I first span up a Home Assistant instance on it the SD card died in about 4 months. I swapped it out with a USB SSD. For smaller scale applications this is fast enough but it's not great. I eventually moved onto a HP ProDesk 600 that I bought used for cheap.
 
 ## Suggestions
-I welcome suggestions! I am always looking to improve my stack, configuration and services. Fork the repo, make your change, and open a pull request! If you have a suggestion, put it in a GitHub Issue.
+I welcome suggestions! I am always looking to improve my stack, configuration and services. Fork the repo, make your change, and open a pull request! If you have a suggestion, put it in a GitHub Issue or Discussion.
 
 ## Future
 - Need to add Plex in here. Currently my Plex is not running in a containerized form so its config would be difficult to check in. This was my first service!
