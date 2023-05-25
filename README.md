@@ -27,6 +27,7 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 - `./homer/config/config.yml.example` -> `./homer/config/config.yml`
 - `./databases/.env.example` -> `./databases/.env`
 - `./adguard/config/AdGuardHome.yml.example` -> `./adguard/config/AdGuardHome.yml`
+- `./homer/data/config.yml.example` -> `./homer/data/config.yml` Mostly you just need to replace `exampledomain.com` with whatever your domain is. Homer is very basic, you can't pass it the domain as a var.
 2. In the `./traefik` directory, run `docker compose up -d` to create the traefik config.
 3. In the `./databases` directory (which you can run on this server or elsewhere), run `docker compose up -d`.
 4. In the root directory, trim out whatever services you don't want in the `docker-compose.yml` file.
@@ -93,6 +94,7 @@ I welcome suggestions! I am always looking to improve my stack, configuration an
 - Need to add Plex in here. Currently my Plex is not running in a containerized form so its config would be difficult to check in. This was my first service!
 - Geo trackers - Google kind of gets there but I'm not super pleased with that.
 - Health trackers - Apple probably has the best ones on the market right now but I would prefer a fully local system.
+- SSL Wildcards - Not sure if they're working correctly, in theory they should work but they haven't yet.
 
 
 
