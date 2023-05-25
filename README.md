@@ -38,28 +38,7 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * [cloudflare-ddns](https://github.com/timothymiller/cloudflare-ddns) - Automatically updates my public DNS record with my public IP.
 * [ghost](https://hub.docker.com/_/ghost) - Home blog
 * [grafana](https://github.com/grafana/grafana) - Visualization of data. Primarily for Unifi Poller, but I can monitor Home Assistant devices in more detail in Grafana.
-* [home_assistant](https://github.com/home-assistant/core) - Home automation and monitoring hub. Everything (almost) hooks into Home Assistant for automation and monitoring purposes. Below is a list of my integrations.
-** Adguard - Monitor the ad blocker
-** Alexa - Talk to the Alexa Dots
-** Ecobee - Thermostat
-** Google Calendar
-** HACS - Non-official integrations for Home Assisnt (Community integratons, not from the store)
-** iRobot - Local control of the Roomba
-** Caseta Bridge - Control of the lights
-** MQTT - Messaging broker
-** National Weather Service - Current and future weather
-** NUT Server - Monitoring and control of the Uninterruptible Power Supply (battery backup)
-** Orbit B-Hyve - Irrigation control
-** Plex - Monitoring and control of Plex playback
-** Roku - Control of Roku sticks for TV control
-** Shelly - Wifi based smart switch control
-** Synology DSM - Monitoring the NAS disks
-** Tasmota - Control of the Wifi lights
-** TP-Link Casa - Control fo the Wifi plugs
-** Unifi Network - Monitoring of the network
-** Unifi Protect - Camera integrations
-** Vizio SmartCast - Control fo the TVs
-** HubZ Controller - Zigbee and ZWave control
+* [home_assistant](https://github.com/home-assistant/core) - Home automation and monitoring hub. Everything (almost) hooks into Home Assistant for automation and monitoring purposes.
 * [homer](https://github.com/bastienwirtz/homer) - Main dashboard where I hold links to all of the different services that are running. Glorified bookmark holder in a webpage.
 * [immich](https://github.com/immich-app/immich) - Photo storage assistant. Copies and backs up photos from phones onto the NAS every night. Much like Google Photos or iCloud storage for photos.
 * [mosquitto](https://github.com/eclipse/mosquitto) - MQTT Messaging bus for Home Assistant
