@@ -33,7 +33,7 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 4. In the root directory, trim out whatever services you don't want in the `docker-compose.yml` file.
 5. In the root directory, run `docker compose up -d`
 6. In the `./adguard` directory, run `docker compose up -d` and then view `<ip address>:3000` to view the adguard config. Set up any users and additional config. Set up the DNS rewrites for the subdomains in the `docker-compose.yml` in the root directory.
-7. Navigate to `homer.setupjustforme.com`
+7. Navigate to `homer.exampledomain.com (put in your domain)`
 
 ## Services:
 * [adguard](https://github.com/AdguardTeam/AdGuardHome) - Home DNS Server. Blocks ads, custom domains/subdomains, rewrites URLs as necessary.
