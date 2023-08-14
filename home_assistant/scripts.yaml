@@ -11,6 +11,13 @@ set_cat_litter_changed_to_today:
       entity_id: input_datetime.cat_litter_replace_next
     data:
       datetime: '{{ (now() + timedelta(days=21)).strftime(''%Y-%m-%d %H:%M:%S'') }}'
+  #- service: calendar.create_event
+  #  data:
+  #    summary: Change cat litter
+  #    start_date: {{ (state_attr('input_datetime.cat_litter_replace_next', 'timestamp') | as_datetime).date() }}
+  #    end_date: {{ (state_attr('input_datetime.cat_litter_replace_next', 'timestamp') | as_datetime).date() }}
+  #  target:
+  #    entity_id: calendar.personal_email
   mode: single
 s_2:
   alias: Say Hello Office
@@ -174,3 +181,19 @@ run_the_roomba:
     type: clean
   mode: single
   icon: mdi:robot-vacuum
+
+play_song_for_rome_on_kid_2_echo_dot:
+  alias: Play Song for Rome on Kid 2 Echo Dot
+  sequence:
+    - service: notify.alexa_media_brian_s_2nd_echo_dot
+      data:
+        message: !secret kid_2_alexa_bedtime_message
+        data:
+          type: tts
+    - service: media_player.play_media
+      data:
+        media_content_id: Song For Rome by Brian Crain
+        media_content_type: AMAZON_MUSIC
+        target:
+          device_id: 897ec3529a673b81e2a408068cc03811
+  mode: single

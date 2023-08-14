@@ -107,10 +107,10 @@ services:
         published: 443
         protocol: tcp
         mode: host
-      #- target: 8080 # insecure api wont work
-      #  published: 8080
-      #  protocol: tcp
-      #  mode: host
+      - target: 8080 # insecure api wont work
+        published: 8080
+        protocol: tcp
+        mode: host
     environment:
       - CF_API_EMAIL=$MY_EMAIL
       - CF_API_KEY=$CF_API_KEY

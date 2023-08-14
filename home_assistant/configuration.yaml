@@ -27,7 +27,6 @@ input_select:
       - Parents
 
 sensor:
-  - platform: bhyve
 
   #Broncos Next Up Date
   - platform: template
@@ -55,9 +54,6 @@ sensor:
         friendly_name: Broncos Next Opponent
         value_template: >-
           {{ states.calendar.denver_broncos.attributes.message }}
-
-switch:
-  - platform: bhyve
 
 #fastdotcom:
 #  scan_interval:
@@ -87,15 +83,6 @@ frontend:
           secondary-text-color: olive
         dark:
           secondary-text-color: slategray
-
-tplink:
-  discovery: false
-  switch:
-    - host: 192.168.2.14
-    - host: 192.168.2.15
-    - host: 192.168.2.16
-    - host: 192.168.2.17
-
 
 notify:
   - name: ecobee_notification
