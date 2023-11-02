@@ -3,20 +3,13 @@ version: "3.8"
 services:
   immich-server:
     container_name: immich_server
-    image: ghcr.io/immich-app/immich-server:release
-    entrypoint: ["/bin/sh", "./start-server.sh"]
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    command: [ "start.sh", "immich" ]
     volumes:
-      #- ${UPLOAD_LOCATION}:/usr/src/app/upload
       - cifs_photo_backup:/usr/src/app/upload
+      - cifs_home_pictures:/mnt/media/external_library:ro
     env_file:
       - .env
-    environment:
-      - NODE_ENV=production
-      - DB_HOSTNAME=${DB_HOSTNAME}
-      - DB_PORT=${DB_PORT}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_DATABASE_NAME=${DB_DATABASE_NAME}
     depends_on:
       - redis
       - typesense
@@ -26,14 +19,16 @@ services:
 
   immich-microservices:
     container_name: immich_microservices
-    image: ghcr.io/immich-app/immich-server:release
-    entrypoint: ["/bin/sh", "./start-microservices.sh"]
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    # extends:
+    #   file: hwaccel.yml
+    #   service: hwaccel
+    command: [ "start.sh", "microservices" ]
     volumes:
       - cifs_photo_backup:/usr/src/app/upload
+      - cifs_home_pictures:/mnt/media/external_library:ro
     env_file:
       - .env
-    environment:
-      - NODE_ENV=production
     depends_on:
       - redis
       - typesense
@@ -43,22 +38,18 @@ services:
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    image: ghcr.io/immich-app/immich-machine-learning:release
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
     volumes:
-      - cifs_photo_backup:/usr/src/app/upload
       - model-cache:/cache
     env_file:
       - .env
-    environment:
-      - NODE_ENV=production
     restart: always
     networks:
       - immich_net
 
   immich-web:
     container_name: immich_web
-    image: ghcr.io/immich-app/immich-web:release
-    entrypoint: ["/bin/sh", "./entrypoint.sh"]
+    image: ghcr.io/immich-app/immich-web:${IMMICH_VERSION:-release}
     env_file:
       - .env
     restart: always
@@ -67,12 +58,12 @@ services:
 
   typesense:
     container_name: immich_typesense
-    image: typesense/typesense:0.24.0
+    image: typesense/typesense:0.24.1@sha256:9bcff2b829f12074426ca044b56160ca9d777a0c488303469143dd9f8259d4dd
     environment:
       - TYPESENSE_API_KEY=${TYPESENSE_API_KEY}
       - TYPESENSE_DATA_DIR=/data
-    logging:
-      driver: none
+      # remove this to get debug messages
+      - GLOG_minloglevel=1
     volumes:
       - tsdata:/data
     restart: always
@@ -81,26 +72,27 @@ services:
 
   redis:
     container_name: immich_redis
-    image: redis:6.2
+    image: redis:6.2-alpine@sha256:70a7a5b641117670beae0d80658430853896b5ef269ccf00d1827427e3263fa3
     restart: always
     networks:
       - immich_net
 
   immich-proxy:
     container_name: immich_proxy
-    image: ghcr.io/immich-app/immich-proxy:release
+    image: ghcr.io/immich-app/immich-proxy:${IMMICH_VERSION:-release}
     environment:
       # Make sure these values get passed through from the env file
       - IMMICH_SERVER_URL
       - IMMICH_WEB_URL
-    #logging:
-    #  driver: none
+    ports:
+      - 2283:8080
     depends_on:
       - immich-server
+      - immich-web
     restart: always
     networks:
-      - traefik_net
       - immich_net
+      - traefik_net
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_net"
@@ -118,9 +110,14 @@ volumes:
       o: ${CIFS_NAS_CREDENTIALS}
       device: "//${DB_HOSTNAME}/brian-home/phone_pictures"
 
+  cifs_home_pictures:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DB_HOSTNAME}/brian-home/Media/Pictures"
+
 networks:
-  traefik_net:
-    external: true
   immich_net:
     external: false
-
+  traefik_net:
+    external: true

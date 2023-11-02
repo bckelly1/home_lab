@@ -194,6 +194,6 @@ play_song_for_rome_on_kid_2_echo_dot:
       data:
         media_content_id: Song For Rome by Brian Crain
         media_content_type: AMAZON_MUSIC
-        target:
-          device_id: 897ec3529a673b81e2a408068cc03811
+      target:
+        entity_id: media_player.brian_s_2nd_echo_dot
   mode: single

@@ -103,8 +103,8 @@ services:
     container_name: home_assistant
     restart: unless-stopped
     # This image is referenced mostly statically. It updates pretty quickly and has frequent breaking changes. Review the documentation before upgrading.
-    #image: homeassistant/home-assistant:2023.7
-    image: homeassistant/home-assistant:2023.8
+    #image: homeassistant/home-assistant:2023.9
+    image: homeassistant/home-assistant:2023.10
     devices:
       # Pass down the connection to the USB devices into Home Assistant.
       - /dev/ttyUSB0:/dev/ttyUSB0 # Nortek Z-Wave/Zigbee hub stick
@@ -141,6 +141,37 @@ services:
       - "traefik.http.routers.homer.rule=Host(`homer.$MY_DOMAIN`)"
       - "traefik.http.routers.homer.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.homer.loadbalancer.server.port=8080"
+    networks:
+      - $DEFAULT_NETWORK
+
+  jellyfin:
+    container_name: jellyfin
+    image: lscr.io/linuxserver/jellyfin:latest
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Denver
+      - JELLYFIN_PublishedServerUrl=192.168.0.6
+    volumes:
+      - ./jellyfin/config:/config #media
+      - tv_guide:/data/tv_guide
+      - cifs_home_lab_storage_tv_shows:/data/tvshows
+      - cifs_home_lab_storage_movies:/data/movies
+      - cifs_home_lab_storage_pictures:/data/photos
+      - cifs_home_lab_storage_music:/data/music
+      - cifs_home_lab_storage_youtube:/data/youtube
+    ports:
+      - 8096:8096
+      #- 8920:8920
+      #- 7359:7359
+      #- 1900:1900
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.$MY_DOMAIN`)"
+      - "traefik.http.routers.jellyfin.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+    restart: unless-stopped
     networks:
       - $DEFAULT_NETWORK
 
@@ -199,6 +230,7 @@ services:
     container_name: paperless
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     restart: unless-stopped
+    user: 0:0
     depends_on:
       - redis
     healthcheck:
@@ -210,7 +242,8 @@ services:
       - apparmor=unconfined
     volumes:
       - ./paperless/data:/usr/src/paperless/data
-      - ./paperless/media:/usr/src/paperless/media
+      #- ./paperless/media:/usr/src/paperless/media
+      - cifs_home_lab_storage_paperless_media:/usr/src/paperless/media
       - ./paperless/export:/usr/src/paperless/export
       - scanned_documents:/usr/src/paperless/consume
     environment:
@@ -226,8 +259,8 @@ services:
       # The UID and GID of the user used to run paperless in the container. Set this
       # to your UID and GID on the host so that you have write access to the
       # consumption directory.
-      USERMAP_UID: 1000
-      USERMAP_GID: 100
+      USERMAP_UID: 0
+      USERMAP_GID: 0
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_net"
@@ -265,12 +298,29 @@ services:
     networks:
       - $DEFAULT_NETWORK
 
+  sdr:
+    image: jketterl/openwebrx:stable
+    container_name: sdr
+    volumes:
+      - ./openwebrx:/var/lib/openwebrx
+    ports:
+      - 8073:8073
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.sdr.rule=Host(`sdr.$MY_DOMAIN`)"
+      - "traefik.http.routers.sdr.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.sdr.loadbalancer.server.port=8073"
+    networks:
+      - $DEFAULT_NETWORK
+
   tandoori:
     container_name: tandoori
     image: vabene1111/recipes
     restart: unless-stopped
     volumes:
-      - ./tandoori/staticfiles:/opt/recipes/staticfiles
       - ./tandoori/mediafiles:/opt/recipes/mediafiles
     labels:
       - "traefik.enable=true"
@@ -326,7 +376,9 @@ services:
     container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --cleanup --schedule "0 7 * * *"
+    environment:
+      - WATCHTOWER_SCHEDULE=0 0 8 * * *
+      - WATCHTOWER_CLEANUP=true
     restart: unless-stopped
 
   wireguard:
@@ -347,6 +399,7 @@ services:
     ports:
       - 51820:51820/udp
       - 51821:51821/tcp
+    restart: unless-stopped
 
   wyze_bridge:
     container_name: wyze_bridge
@@ -370,6 +423,19 @@ services:
       - SNAPSHOT=API
       - IMG_DIR=/img/
 
+  tv_guide_fetcher:
+    container_name: tv_guide_fetcher
+    image: shuaiscott/zap2xml:latest
+    restart: always
+    volumes:
+        - tv_guide:/data
+    environment:
+        - SLEEPTIME=86400
+        - USERNAME=$ZAP_USER
+        - PASSWORD=$ZAP_PASSWORD
+        - OPT_ARGS=-I -D -Z $ZAP_ZIP_CODE -S 2
+        - XMLTV_FILENAME=tv_guide.xmlwq
+
 secrets:
   nut-upsd-password:
     file: ./secrets/nut_server_secret
@@ -387,12 +453,57 @@ volumes:
   # Used to share documents between home_assistant and paperless
   scanned_documents:
 
+  # Used to share TV guide between fetcher and Jellyfin
+  tv_guide:
+
   # Backs up documents to the NAS for more permanent storage
   cifs_document_backup:
     driver_opts:
       type: "cifs"
       o: ${CIFS_NAS_CREDENTIALS}
       device: "//${DATABASE_HOSTNAME}/brian-home/scanner_files"
+
+  cifs_home_lab_storage_paperless_media:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DATABASE_HOSTNAME}/brian-home/home_lab_storage/paperless/media"
+
+  cifs_home_lab_storage_tandoori_media:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DATABASE_HOSTNAME}/brian-home/home_lab_storage/tandoori/media"
+
+  cifs_home_lab_storage_movies:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Videos"
+
+  cifs_home_lab_storage_tv_shows:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Shows"
+
+  cifs_home_lab_storage_music:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Music"
+
+  cifs_home_lab_storage_pictures:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Pictures"
+
+  cifs_home_lab_storage_youtube:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Youtube"
 
   netdata_config:
   netdata_lib:

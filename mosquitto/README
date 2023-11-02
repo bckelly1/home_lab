@@ -1,0 +1,4 @@
+To add a new user login to mosquitto:
+exec into the container
+cd into /mosquitto/config
+quitto_passwd ./passwords <new username>
