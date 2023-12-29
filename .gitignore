@@ -111,3 +111,6 @@
 # Tandoori - no custom config, ignore all
 /tandoori/
 
+# Home Lab APIs Repo
+/home_lab_apis/
+

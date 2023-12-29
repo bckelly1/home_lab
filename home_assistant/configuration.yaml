@@ -123,7 +123,11 @@ http:
     - 172.20.0.0/24
     - 127.0.0.0/24
 
-
+rest_command:
+  call_gmail_poller:
+    url: !secret transaction_import_url
+  call_gmail_daycare_poller:
+    url: !secret daycare_import_url
 
 
 

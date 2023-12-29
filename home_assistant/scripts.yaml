@@ -74,64 +74,82 @@ play_classical_piano_in_kitchen:
 shut_down_for_the_night:
   alias: Shut down for the night
   sequence:
-  - type: turn_off
-    device_id: 3aa638405805f8bd01701013aaf05125
-    entity_id: switch.shelly_bedroom_light
-    domain: switch
-    enabled: false
-  - device_id: 2bf0bbb1497555812687e5e86127fadc
-    domain: cover
-    entity_id: cover.garage_door_2
-    type: close
-  - device_id: 64d671a5d486699f63d500f4c0bc6d9c
-    domain: cover
-    entity_id: cover.garage_door_1
-    type: close
-  - type: turn_off
-    device_id: 0a98806df46c17adf79df83af5a2f451
-    entity_id: remote.garage_roku_express_4k
-    domain: remote
-  - type: turn_off
-    device_id: d7c255965b2f1fc0dbdcd3078dda373f
-    entity_id: remote.groku
-    domain: remote
-    enabled: false
-  - type: turn_off
-    device_id: e7c83f135175e900b949bca3c7e09934
-    entity_id: light.office_spot_lights
-    domain: light
-  - type: turn_off
-    device_id: ecba7d7b16331751f9a7c799f1ef5ec9
-    entity_id: light.tasmota
-    domain: light
-  - type: turn_on
-    device_id: dd5b8d74b7a448094d60f928b8fc3516
-    entity_id: switch.g4_doorbell_privacy_mode
-    domain: switch
-  - type: turn_off
-    device_id: dd5b8d74b7a448094d60f928b8fc3516
-    entity_id: switch.g4_doorbell_system_sounds
-    domain: switch
-  - if:
-    - condition: state
-      attribute: brightness
-      state: '> 0'
-      entity_id: light.basement_game_area_main_lights
-    then:
-    - service: scene.turn_on
-      target:
-        entity_id: scene.game_room_dim
-      metadata: {}
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 2
-        milliseconds: 0
-    - device_id: 4a29da87843f32fde56e6bd55b600bf5
+    - type: turn_off
+      device_id: 0a98806df46c17adf79df83af5a2f451
+      entity_id: remote.garage_roku_express_4k
+      domain: remote
+    - type: turn_off
+      device_id: d7c255965b2f1fc0dbdcd3078dda373f
+      entity_id: remote.groku
+      domain: remote
+      enabled: false
+    - type: turn_off
+      device_id: e7c83f135175e900b949bca3c7e09934
+      entity_id: light.office_spot_lights
       domain: light
-      entity_id: light.basement_game_area_main_lights
-      type: brightness_increase
+    - type: turn_off
+      device_id: ecba7d7b16331751f9a7c799f1ef5ec9
+      entity_id: light.tasmota
+      domain: light
+    - type: turn_on
+      device_id: dd5b8d74b7a448094d60f928b8fc3516
+      entity_id: switch.g4_doorbell_privacy_mode
+      domain: switch
+    - type: turn_off
+      device_id: dd5b8d74b7a448094d60f928b8fc3516
+      entity_id: switch.g4_doorbell_system_sounds
+      domain: switch
+    - if:
+        - condition: state
+          attribute: brightness
+          state: "> 0"
+          entity_id: light.basement_game_area_main_lights
+      then:
+        - service: scene.turn_on
+          target:
+            entity_id: scene.game_room_dim
+          metadata: {}
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 2
+            milliseconds: 0
+        - device_id: 4a29da87843f32fde56e6bd55b600bf5
+          domain: light
+          entity_id: light.basement_game_area_main_lights
+          type: brightness_increase
+    - if:
+        - type: is_open
+          condition: device
+          device_id: 62025bd749666da1bd82c9eadb9f5dfa
+          entity_id: bf8d8c8b64d6244d3a1b8f29fa92ec53
+          domain: binary_sensor
+      then:
+        - type: turn_on
+          device_id: 62025bd749666da1bd82c9eadb9f5dfa
+          entity_id: 53a0f564765d2535d9fccef9e307dc1e
+          domain: switch
+        - type: turn_off
+          device_id: 62025bd749666da1bd82c9eadb9f5dfa
+          entity_id: 53a0f564765d2535d9fccef9e307dc1e
+          domain: switch
+    - if:
+        - type: is_open
+          condition: device
+          device_id: 7b1a06bd4ebf3985240a0ddc2e492b63
+          entity_id: 2e09b9fb2bbeb38bc95337131d95fb76
+          domain: binary_sensor
+      then:
+        - type: turn_on
+          device_id: 7b1a06bd4ebf3985240a0ddc2e492b63
+          entity_id: 5f9ffbbde1cb731008b3b856e778638d
+          domain: switch
+        - type: turn_off
+          device_id: 7b1a06bd4ebf3985240a0ddc2e492b63
+          entity_id: 5f9ffbbde1cb731008b3b856e778638d
+          domain: switch
   mode: single
+
 toggle_garage_1_button:
   alias: Toggle garage 1 button
   sequence:

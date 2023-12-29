@@ -5,3 +5,6 @@
 # Clean up the backups of the homelab
 0 0 * * * root /home/brian/git/home_lab/scripts/cleanup_backups.sh /home/brian/backups 2>&1 /var/log/cronjobs.log
 
+# Clean up docker stuff
+0 2 * * * root docker system prune -a -f
+
