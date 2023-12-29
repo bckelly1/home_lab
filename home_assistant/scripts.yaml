@@ -190,6 +190,12 @@ scan_the_printer:
   - service: shell_command.run_scan_document
     data: {}
   mode: single
+scan_image_on_printer:
+  alias: Scan image from the printer
+  sequence:
+  - service: shell_command.run_scan_image
+    data: {}
+  mode: single
 run_the_roomba:
   alias: Run the roomba
   sequence:
