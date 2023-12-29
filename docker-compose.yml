@@ -110,6 +110,10 @@ services:
       - /dev/ttyUSB0:/dev/ttyUSB0 # Nortek Z-Wave/Zigbee hub stick
       - /dev/ttyUSB1:/dev/ttyUSB1 # USB connection to APC UPS. Monitors the UPS, allows for automatic shutdown 
       - /dev/ttyACM0:/dev/ttyACM0 # Possibly unused
+    environment:
+      - IMAGE_DIR=/config/image_scans/
+      - DOCUMENT_DIR=/config/cifs_backup/
+      - PAPERLESS_DIR=/config/scanned_documents/
     volumes:
       - ./home_assistant:/config
       - /etc/localtime:/etc/localtime:ro
@@ -117,6 +121,7 @@ services:
       - /dev/serial/by-id/:/dev/serial/by-id/
       - scanned_documents:/config/scanned_documents
       - cifs_document_backup:/config/cifs_backup
+      - cifs_image_backup:/config/image_scans
     privileged: true
     labels:
       - "traefik.enable=true"
@@ -464,6 +469,12 @@ volumes:
       type: "cifs"
       o: ${CIFS_NAS_CREDENTIALS}
       device: "//${DATABASE_HOSTNAME}/brian-home/scanner_files"
+
+  cifs_image_backup:
+    driver_opts:
+      type: "cifs"
+      o: ${CIFS_NAS_CREDENTIALS}
+      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Pictures/Scans"
 
   cifs_home_lab_storage_paperless_media:
     driver_opts:
