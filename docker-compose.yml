@@ -48,7 +48,7 @@ services:
 
   ghost:
     container_name: ghost
-    image: ghost:4-alpine
+    image: ghost:5-alpine
     restart: unless-stopped
     environment:
       # see https://ghost.org/docs/config/#configuration-options
@@ -103,8 +103,8 @@ services:
     container_name: home_assistant
     restart: unless-stopped
     # This image is referenced mostly statically. It updates pretty quickly and has frequent breaking changes. Review the documentation before upgrading.
-    #image: homeassistant/home-assistant:2023.11
-    image: homeassistant/home-assistant:2023.12
+    #image: homeassistant/home-assistant:2023.12
+    image: homeassistant/home-assistant:2024.1
     devices:
       # Pass down the connection to the USB devices into Home Assistant.
       - /dev/ttyUSB0:/dev/ttyUSB0 # Nortek Z-Wave/Zigbee hub stick
