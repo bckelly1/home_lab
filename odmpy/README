@@ -1,0 +1,8 @@
+origin: https://github.com/ping/odmpy/tree/master
+The first time this is run against Libby, it will prompt for a device code which can be found on an existing device
+
+
+python -m odmpy libby --settings ./config -d ./MyLoans -c -m --ebooks
+
+
+
