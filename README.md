@@ -37,17 +37,23 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 
 ## Services:
 * [adguard](https://github.com/AdguardTeam/AdGuardHome) - Home DNS Server. Blocks ads, custom domains/subdomains, rewrites URLs as necessary.
+* [audiobookshelf](https://github.com/advplyr/audiobookshelf) - eBook Manager. Allows for reading eBooks and listening to Audiobook MP3s. Like Plex for Audiobooks.
 * [bitwarden](https://github.com/dani-garcia/vaultwarden) - Home Password manager
 * [change_detection](https://github.com/dgtlmoon/changedetection.io) - Watches for changes on websites
 * [cloudflare-ddns](https://github.com/timothymiller/cloudflare-ddns) - Automatically updates my public DNS record with my public IP.
+* [cura]
 * [ghost](https://hub.docker.com/_/ghost) - Home blog
 * [grafana](https://github.com/grafana/grafana) - Visualization of data. Primarily for Unifi Poller, but I can monitor Home Assistant devices in more detail in Grafana.
 * [home_assistant](https://github.com/home-assistant/core) - Home automation and monitoring hub. Everything (almost) hooks into Home Assistant for automation and monitoring purposes.
+* [home_lab_apis](https://github.com/bckelly1/home_lab_apis) - Where I write some of my custom APIs and web interfaces.
 * [homer](https://github.com/bastienwirtz/homer) - Main dashboard where I hold links to all of the different services that are running. Glorified bookmark holder in a webpage.
 * [immich](https://github.com/immich-app/immich) - Photo storage assistant. Copies and backs up photos from phones onto the NAS every night. Much like Google Photos or iCloud storage for photos.
+* [jellyfin](https://github.com/jellyfin/jellyfin) - Media management platform. Like Plex, but open source and a bit more flexible.
+* [linkding](https://github.com/sissbruecker/linkding/tree/master) - Link Manager. I copy interesting URLs into here to look into later. Sort of like bookmarks but maybe not as permanent.
 * [mosquitto](https://github.com/eclipse/mosquitto) - MQTT Messaging bus for Home Assistant
 * [netdata](https://github.com/netdata/netdata) - Monitors system metrics (CPU, Disk, Memory, Network traffic, etc)
 * [nut_server](https://hub.docker.com/r/instantlinux/nut-upsd) - Integration with the Network Uninterruptible Powersupply backup.
+* [openwebrx](https://github.com/jketterl/openwebrx) - SDR (Software Defined Radio). Allows you to listen to Ham Radio broadcasts.
 * [paperless](https://github.com/paperless-ngx/paperless-ngx) - Optical Character Recognition tools used for tagging and cataloging documents (PDF, Word, Excel, etc)
 * [portainer](https://github.com/portainer/portainer) - Monitors the health, status and configuration of all Docker containers.
 * [redis](https://github.com/redis/redis) - Caching system for paperless
@@ -57,6 +63,7 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * [watchtower](https://github.com/containrrr/watchtower) - Automatically keeps all docker containers up to date with the latest released images.
 * [wireguard](https://github.com/linuxserver/docker-wireguard) - VPN.
 * [wyze_bridge](https://github.com/mrlt8/docker-wyze-bridge) - Allows for local control and monitoring of all Wyze devices (cameras)
+* [zap2xml](https://github.com/jef/zap2xml) - Downloads a TV guide for your local broadcasts so Jellyfin can show a guide and be able to tune into Over-The-Air broadcasts.
 
 
 * [traefik](https://github.com/traefik/traefik) - network proxy. Allows all services to share an HTTP endpoint (80/443) rather than all services running on their own ports/colliding. It also manages SSL for all services that are connected
