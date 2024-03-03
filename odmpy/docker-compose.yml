@@ -5,4 +5,7 @@ services:
     container_name: odmpy
     volumes:
       - ./config:/usr/src/app/config
-      - ./MyLoans:/usr/src/app/MyLoans
+      - /mnt/nas/Media/Audiobooks/:/usr/src/app/MyLoans
+    restart: unless-stopped
+
+

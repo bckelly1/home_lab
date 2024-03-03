@@ -1,8 +1,7 @@
-origin: https://github.com/ping/odmpy/tree/master
-The first time this is run against Libby, it will prompt for a device code which can be found on an existing device
+Repo Origin: https://github.com/ping/odmpy
+There is no dedicated docker image, so I created a Dockerfile and built one myself. Overkill, wasteful and unnecessary but it's fine.
 
-
-python -m odmpy libby --settings ./config -d ./MyLoans -c -m --ebooks
-
+command to run:
+python3 -m odmpy libby --keepcover --merge --settings ./config --ebooks -d ./MyLoans --bookfolderformat "%(Author)s" --bookfileformat "%(Title)s"
 
 

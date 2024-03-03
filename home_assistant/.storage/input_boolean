@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "input_boolean",
+  "data": {
+    "items": [
+      {
+        "id": "turn_on_baby_candle",
+        "name": "Turn on Baby Candle",
+        "icon": "mdi:candle"
+      }
+    ]
+  }
+}

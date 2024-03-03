@@ -2,6 +2,11 @@
 .env
 **.swp
 /secrets/
+**/*.log
+
+# Audiobookshelf
+/audiobookshelf/config/
+/audiobookshelf/metadata/
 
 # Bitwarden -- I don't see any files I can safely commit
 /bitwarden/
@@ -11,6 +16,9 @@
 
 # Chronograf -- no useful files
 /chronograf/
+
+# Cura
+/cura/cura/
 
 # Grafana -- all default files and then sqlite database
 /grafana/data/
@@ -28,12 +36,16 @@
 /home_assistant/blueprints/
 /home_assistant/caseta_certs/
 /home_assistant/custom_components/
+/home_assistant/photos/
 /home_assistant/shared/
+/home_assistant/shelly
 /home_assistant/tts/
 /home_assistant/www/
 /home_assistant/zigbee.db
+/home_assistant/.storage/assist*
 /home_assistant/.storage/auth
 /home_assistant/.storage/auth_provider.homeassistant
+/home_assistant/.storage/bluetooth*
 /home_assistant/.storage/core.analytics
 /home_assistant/.storage/core.area_registry
 /home_assistant/.storage/core.config
@@ -49,7 +61,9 @@
 /home_assistant/.storage/hacs.repositories
 /home_assistant/.storage/hassio
 /home_assistant/.storage/.hpprinter.hp_printer
+/home_assistant/.storage/homeassistant*
 /home_assistant/.storage/http
+/home_assistant/.storage/google*
 /home_assistant/.storage/lovelace_network
 /home_assistant/.storage/lovelace.lovelace_network
 /home_assistant/.storage/repairs.issue_registry
@@ -59,6 +73,8 @@
 /home_assistant/.storage/tmpbe_kcvmp
 /home_assistant/.storage/trace.saved_traces
 /home_assistant/.storage/unifi_data
+/home_assistant/.storage/unifi*
+/home_assistant/.storage/vizio
 /home_assistant/.storage/zha.storage
 /home_assistant/.cloud/
 /home_assistant/.storage/alexa
@@ -67,15 +83,20 @@
 /home_assistant/.storage/cloud
 /home_assistant/.storage/google_assistant
 /home_assistant/.storage/http.auth
-/home_assistant/.storage/tmp08ro0vx5
-/home_assistant/.storage/tmp28ozk329
-/home_assistant/.storage/tmp2g75ydt3
-/home_assistant/.storage/tmpoxprrkt3
+/home_assistant/.storage/tmp*
 /home_assistant/zigbee.db-shm
 /home_assistant/zigbee.db-wal
 # Custom Home Assistant
 /home_assistant/scanned_documents/
 
+# Jellyfin
+/jellyfin/
+
+# Linkding
+/linkding/
+
+# Local PDF Merger
+/localpdfmerger/
 
 # Tandoor
 /tandoori/staticfiles/
@@ -91,6 +112,9 @@
 
 # Mosquitto -- private info in only useful file
 /mosquitto/
+
+# OpenWebRX -- SDR
+/openwebrx/openwebrx/
 
 # Portainer -- all sensitive info, default setup from compose is fine
 /portainer/
@@ -111,6 +135,12 @@
 # Tandoori - no custom config, ignore all
 /tandoori/
 
+# Uptime Kuma
+/uptime_kuma/
+
 # Home Lab APIs Repo
 /home_lab_apis/
 
+
+# Zap2Xml
+/zap2xml/

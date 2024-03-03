@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  cura:
+    image: lscr.io/linuxserver/cura:latest
+    container_name: cura
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./cura:/config
+    ports:
+      - 4000:3000
+    restart: unless-stopped
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+      - "traefik.http.routers.cura.rule=Host(`cura.$MY_DOMAIN`)"
+      - "traefik.http.routers.cura.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.cura.loadbalancer.server.port=3000"
+
+networks:
+  traefik_net:
+    external: true

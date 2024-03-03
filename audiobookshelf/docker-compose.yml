@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    #ports:
+    #  - 13378:80
+    volumes:
+      - /mnt/nas/Media/Audiobooks:/audiobooks
+      - /mnt/nas/Media/eBooks:/eBooks
+      - /mnt/nas/Media/Podcasts:/podcasts
+      - ./config:/config
+      - ./metadata:/metadata
+    networks:
+      - traefik_net
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+      - "traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.$MY_DOMAIN`)"
+      - "traefik.http.routers.audiobookshelf.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"
+
+networks:
+  traefik_net:
+    external: true
