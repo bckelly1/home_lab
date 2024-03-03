@@ -41,7 +41,7 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * [bitwarden](https://github.com/dani-garcia/vaultwarden) - Home Password manager
 * [change_detection](https://github.com/dgtlmoon/changedetection.io) - Watches for changes on websites
 * [cloudflare-ddns](https://github.com/timothymiller/cloudflare-ddns) - Automatically updates my public DNS record with my public IP.
-* [cura]
+* [cura](https://github.com/Ultimaker/Cura) - 3d Printer Slicer.
 * [ghost](https://hub.docker.com/_/ghost) - Home blog
 * [grafana](https://github.com/grafana/grafana) - Visualization of data. Primarily for Unifi Poller, but I can monitor Home Assistant devices in more detail in Grafana.
 * [home_assistant](https://github.com/home-assistant/core) - Home automation and monitoring hub. Everything (almost) hooks into Home Assistant for automation and monitoring purposes.
@@ -92,13 +92,12 @@ I typically spin up the database and AdGuard/PiHole on a separate server, the mo
 
 I would not suggest putting all of these on a Raspberry Pi, unless you are working with a Raspberry Pi 4 4GB or above. The databases alone suck down 2 GB of RAM, and the rest of the stack uses 6 GB with everything running.
 
-Be careful about running any of these on a Raspberry Pi by itself. The microSD card in the Raspberry pi isn't made for the logging from the services. When I first span up a Home Assistant instance on it the SD card died in about 4 months. I swapped it out with a USB SSD. For smaller scale applications this is fast enough but it's not great. I eventually moved onto a HP ProDesk 600 that I bought used for cheap.
+Be careful about running any of these on a Raspberry Pi by itself. The microSD card in the Raspberry pi isn't made for the logging from the services. When I first span up a Home Assistant instance on it the SD card died in about 4 months. I swapped it out with a USB SSD. For smaller scale applications this is fast enough but it's not great. I eventually moved onto a HP ProDesk 600 that I bought used for cheap. It has been solid ever since.
 
 ## Suggestions
-I welcome suggestions! I am always looking to improve my stack, configuration and services. Fork the repo, make your change, and open a pull request! If you have a suggestion, put it in a GitHub Issue or Discussion.
+I welcome suggestions! I am always looking to improve my stack, configuration and services. Fork the repo, make your change, and open a pull request! If you have a question or suggestion, put it in a GitHub Issue or Discussion.
 
 ## Future
-- Need to add Plex in here. Currently my Plex is not running in a containerized form so its config would be difficult to check in. This was my first service!
 - Geo trackers - Google kind of gets there but I'm not super pleased with that.
 - Health trackers - Apple probably has the best ones on the market right now but I would prefer a fully local system.
 - SSL Wildcards - Not sure if they're working correctly, in theory they should work but they haven't yet.
