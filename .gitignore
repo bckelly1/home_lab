@@ -9,7 +9,7 @@
 /audiobookshelf/metadata/
 
 # Bitwarden -- I don't see any files I can safely commit
-/bitwarden/
+/bitwarden/data*
 
 # Change detection -- only useful files have HA creds in them
 /change_detection/data/
