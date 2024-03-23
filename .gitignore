@@ -12,7 +12,7 @@
 /bitwarden/
 
 # Change detection -- only useful files have HA creds in them
-/change_detection/
+/change_detection/data/
 
 # Chronograf -- no useful files
 /chronograf/

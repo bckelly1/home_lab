@@ -1,51 +1,5 @@
 version: '3.8'
 services:
-  # Password Manager
-  bitwarden:
-    container_name: bitwarden
-    environment:
-      DATABASE_URL: ${BITWARDEN_DB_URL}
-    image: vaultwarden/server:latest
-    restart: always
-    volumes:
-      - ./bitwarden/data:/data
-    labels:
-      - "traefik.docker.network=$DEFAULT_NETWORK"
-      - "traefik.enable=true"
-      - "traefik.http.routers.bitwarden.rule=Host(`bitwarden.$MY_DOMAIN`)"
-      - "traefik.http.routers.bitwarden.tls.certresolver=dns-cloudflare"
-    networks:
-      - $DEFAULT_NETWORK
-
-  change_detection:
-    container_name: change_detection
-    image: dgtlmoon/changedetection.io
-    restart: unless-stopped
-    volumes:
-      - ./change_detection/:/datastore
-    #hostname: change-detection.$MY_DOMAIN
-    environment:
-    #  - BASE_URL=change-detection.$MY_DOMAIN
-      - NAME="Change Detection"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=$DEFAULT_NETWORK"
-      - "traefik.http.routers.change_detection.rule=Host(`change-detection.$MY_DOMAIN`)"
-      - "traefik.http.routers.change_detection.tls.certresolver=dns-cloudflare"
-      - "traefik.http.services.change_detection.loadbalancer.server.port=5000"
-    #dns: ${DATABASE_HOSTNAME}
-    networks:
-      - $DEFAULT_NETWORK
-
-  cloudflare-ddns:
-    image: oznu/cloudflare-ddns:latest
-    container_name: cloudflare_ddns
-    restart: always
-    environment:
-      - API_KEY=$CLOUDFLARE_API_KEY
-      - ZONE=$MY_DOMAIN
-      - PROXIED=false
-
   ghost:
     container_name: ghost
     image: ghost:5-alpine

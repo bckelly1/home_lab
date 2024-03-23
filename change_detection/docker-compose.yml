@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  change_detection:
+    container_name: change_detection
+    image: dgtlmoon/changedetection.io
+    restart: unless-stopped
+    volumes:
+      - ./data/:/datastore
+    #hostname: change-detection.$MY_DOMAIN
+    environment:
+    #  - BASE_URL=change-detection.$MY_DOMAIN
+      - NAME="Change Detection"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.change_detection.rule=Host(`change-detection.$MY_DOMAIN`)"
+      - "traefik.http.routers.change_detection.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.change_detection.loadbalancer.server.port=5000"
+    #dns: ${DATABASE_HOSTNAME}
+    networks:
+      - $DEFAULT_NETWORK
+
+networks:
+  traefik_net:
+    name: $DEFAULT_NETWORK
+    external: true
+

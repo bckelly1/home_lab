@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  cloudflare-ddns:
+    image: oznu/cloudflare-ddns:latest
+    container_name: cloudflare_ddns
+    restart: always
+    environment:
+      - API_KEY=$CLOUDFLARE_API_KEY
+      - ZONE=$MY_DOMAIN
+      - PROXIED=false
+
