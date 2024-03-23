@@ -15,7 +15,8 @@ services:
     ports:
       - 4000:3000
     restart: unless-stopped
-
+    networks:
+      - traefik_net
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_net"

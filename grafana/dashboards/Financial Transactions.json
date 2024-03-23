@@ -104,8 +104,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -224,8 +223,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -252,7 +250,7 @@
         "textMode": "value",
         "wideLayout": true
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -308,8 +306,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -336,7 +333,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -394,8 +391,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -422,7 +418,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -487,8 +483,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -515,7 +510,7 @@
         "textMode": "value",
         "wideLayout": true
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -595,8 +590,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": [
           {
@@ -657,12 +651,12 @@
         "showHeader": true,
         "sortBy": [
           {
-            "desc": true,
-            "displayName": "Time"
+            "desc": false,
+            "displayName": "Amount"
           }
         ]
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -674,7 +668,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT \ndate as \"time\",\n-(amount) as \"Amount\",\ndescription as Description,\nfinance_accounts.name \"Account Name\",\nfinance_categories.name as \"Category\",\nfinance_institutions.name \"Institution\"\nfrom finance_transactions\nJOIN finance_vendors ON finance_transactions.merchant = finance_vendors.id\nJOIN finance_accounts ON finance_transactions.account = finance_accounts.id\nJOIN finance_institutions ON finance_accounts.institution = finance_institutions.id\nJOIN finance_categories ON finance_transactions.category = finance_categories.id\nwhere $__timeFilter(date)\nand transaction_type = 'debit'\nand finance_categories.name != 'Transfer'\norder by date desc",
+          "rawSql": "SELECT \ndate as \"time\",\n-(amount) as \"Amount\",\ndescription as Description,\nfinance_accounts.name \"Account Name\",\nfinance_categories.name as \"Category\",\nfinance_institutions.name \"Institution\"\nfrom finance_transactions\nJOIN finance_vendors ON finance_transactions.merchant = finance_vendors.id\nJOIN finance_accounts ON finance_transactions.account = finance_accounts.id\nJOIN finance_institutions ON finance_accounts.institution = finance_institutions.id\nJOIN finance_categories ON finance_transactions.category = finance_categories.id\nwhere $__timeFilter(date)\nand transaction_type IN('debit', 'Debit')\nand finance_categories.name != 'Transfer'\norder by date desc",
           "refId": "B",
           "sql": {
             "columns": [
@@ -730,8 +724,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": [
           {
@@ -820,12 +813,12 @@
         "showHeader": true,
         "sortBy": [
           {
-            "desc": true,
-            "displayName": "Time"
+            "desc": false,
+            "displayName": "Amount"
           }
         ]
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -895,8 +888,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -925,7 +917,7 @@
           }
         ]
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -937,7 +929,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT \n  finance_categories.name AS \"Category\",\n  sum(\n    if(transaction_type = 'debit', -(amount), amount)\n    ) as \"Total\"\nfrom finance_transactions\nJOIN finance_categories ON finance_transactions.category = finance_categories.id\nwhere $__timeFilter(date)\nGROUP BY finance_categories.name\norder by amount desc",
+          "rawSql": "SELECT \n  finance_categories.name AS \"Category\",\n  sum(\n    if(transaction_type = 'debit', -(amount), amount)\n    ) as \"Total\"\nfrom finance_transactions\nJOIN finance_categories ON finance_transactions.category = finance_categories.id\nwhere $__timeFilter(date)\nand finance_transactions.transaction_type in ('debit', 'Debit')\nGROUP BY finance_categories.name\norder by amount desc",
           "refId": "A",
           "sql": {
             "columns": [
@@ -994,8 +986,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": [
           {
@@ -1066,9 +1057,14 @@
           "show": false
         },
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Total"
+          }
+        ]
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -1080,7 +1076,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT \n  date as \"time\",\n  sum(\n    if(transaction_type = 'debit', -(amount), amount)\n    ) as \"Total\",\n  finance_vendors.name AS \"Merchant\"\nfrom finance_transactions\n  JOIN finance_vendors ON finance_transactions.merchant = finance_vendors.id\nwhere $__timeFilter(date)\nGROUP BY finance_vendors.name\norder by amount desc",
+          "rawSql": "SELECT \n  date as \"time\",\n  sum(\n    if(transaction_type = 'debit', -(amount), amount)\n    ) as \"Total\",\n  finance_vendors.name AS \"Merchant\"\nfrom finance_transactions\n  JOIN finance_vendors ON finance_transactions.merchant = finance_vendors.id\nwhere $__timeFilter(date)\nand finance_transactions.transaction_type in ('debit', 'Debit')\nGROUP BY finance_vendors.name\norder by amount desc",
           "refId": "B",
           "sql": {
             "columns": [
@@ -1133,8 +1129,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -1158,7 +1153,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -1201,6 +1196,124 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "unit": "locale"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "Total"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 26
+      },
+      "id": 14,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Value",
+          "sortDesc": false,
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^Total$/",
+          "limit": 9,
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.0",
+      "targets": [
+        {
+          "dataset": "brian_home",
+          "datasource": {
+            "type": "mysql",
+            "uid": "JemXVlzRk"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT \n  finance_categories.name AS \"Category\",\n  sum(amount) as \"Total\"\nfrom finance_transactions\nJOIN finance_categories ON finance_transactions.category = finance_categories.id\nwhere $__timeFilter(date)\nAND finance_transactions.transaction_type IN ('debit', 'Debit')\nAND finance_categories.name != 'Transfer'\nAND finance_categories.name != 'Credit Card Payment'\nGROUP BY finance_categories.name\norder by amount desc",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Share of Category Purchases",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "JemXVlzRk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "thresholds"
           },
           "custom": {
@@ -1225,8 +1338,7 @@
               }
             ]
           },
-          "unit": "locale",
-          "unitScale": true
+          "unit": "locale"
         },
         "overrides": [
           {
@@ -1282,7 +1394,7 @@
       "gridPos": {
         "h": 8,
         "w": 8,
-        "x": 0,
+        "x": 12,
         "y": 26
       },
       "id": 3,
@@ -1299,7 +1411,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "10.3.1",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "dataset": "brian_home",
@@ -1350,6 +1462,6 @@
   "timezone": "",
   "title": "Financial Transactions",
   "uid": "bfc4f69d-b862-435b-908a-4ebfa3e1b106",
-  "version": 32,
+  "version": 41,
   "weekStart": ""
 }
