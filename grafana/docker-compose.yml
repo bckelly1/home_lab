@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    user: "1000"
+    volumes:
+      - ./data:/var/lib/grafana
+      - ./logs:/logs
+    environment:
+      GF_SERVER_ROOT_URL: "http://grafana.${MY_DOMAIN}"
+      GF_SERVER_DOMAIN: "grafana.${MY_DOMAIN}"
+      GF_SECURITY_ADMIN_USER: "${GRAFANA_USERNAME}"
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD}"
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,natel-discrete-panel,grafana-piechart-panel"
+      GF_PATHS_LOGS: "/logs"
+      GF_LOG_MODE: "console file"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.$MY_DOMAIN`)"
+      - "traefik.http.routers.grafana.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    networks:
+      - $DEFAULT_NETWORK
+
+networks:
+  traefik_net:
+    name: $DEFAULT_NETWORK
+    external: true
+

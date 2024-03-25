@@ -28,31 +28,6 @@ services:
     networks:
       - $DEFAULT_NETWORK
 
-  grafana:
-    container_name: grafana
-    image: grafana/grafana:latest
-    restart: unless-stopped
-    user: "1000"
-    volumes:
-      - ./grafana/data:/var/lib/grafana
-      - ./grafana/logs:/logs
-    environment:
-      GF_SERVER_ROOT_URL: "http://grafana.${MY_DOMAIN}"
-      GF_SERVER_DOMAIN: "grafana.${MY_DOMAIN}"
-      GF_SECURITY_ADMIN_USER: "${GRAFANA_USERNAME}"
-      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD}"
-      GF_INSTALL_PLUGINS: "grafana-clock-panel,natel-discrete-panel,grafana-piechart-panel"
-      GF_PATHS_LOGS: "/logs"
-      GF_LOG_MODE: "console file"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=$DEFAULT_NETWORK"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.$MY_DOMAIN`)"
-      - "traefik.http.routers.grafana.tls.certresolver=dns-cloudflare"
-      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
-    networks:
-      - $DEFAULT_NETWORK
-
   home_assistant:
     container_name: home_assistant
     restart: unless-stopped
@@ -89,21 +64,6 @@ services:
       - home_assistant_services
     dns:
       - 192.168.0.12
-
-  homer:
-    image: b4bz/homer:latest
-    restart: always
-    container_name: homer
-    volumes:
-      - ./homer/data:/www/assets
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=$DEFAULT_NETWORK"
-      - "traefik.http.routers.homer.rule=Host(`homer.$MY_DOMAIN`)"
-      - "traefik.http.routers.homer.tls.certresolver=dns-cloudflare"
-      - "traefik.http.services.homer.loadbalancer.server.port=8080"
-    networks:
-      - $DEFAULT_NETWORK
 
   jellyfin:
     container_name: jellyfin
@@ -145,31 +105,6 @@ services:
       - ./mosquitto/data:/mosquitto/data
       - ./mosquitto/log:/mosquitto/log
     network_mode: host
-
-  netdata:
-    container_name: netdata
-    restart: always
-    image: netdata/netdata:latest
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor=unconfined
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=$DEFAULT_NETWORK"
-      - "traefik.http.routers.netdata.rule=Host(`netdata.$MY_DOMAIN`)"
-      - "traefik.http.routers.netdata.tls.certresolver=dns-cloudflare"
-      - "traefik.http.services.netdata.loadbalancer.server.port=19999"
-    volumes:
-      - netdata_config:/etc/netdata
-      - netdata_lib:/var/lib/netdata
-      - netdata_cache:/var/cache/netdata
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /proc:/host/proc:ro
-      - /etc/os-release:/host/etc/os-release:ro
-    networks:
-      - $DEFAULT_NETWORK
 
   nut_server:
     container_name: nut_server
@@ -231,24 +166,6 @@ services:
     networks:
       - $DEFAULT_NETWORK
 
-  portainer:
-    image: cr.portainer.io/portainer/portainer-ce:latest
-    container_name: portainer
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./portainer/data:/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik_net"
-      #- "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.$MY_DOMAIN`)"
-      - "traefik.http.routers.portainer.tls.certresolver=dns-cloudflare"
-      - "traefik.http.routers.portainer.service=portainer"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-    networks:
-      - $DEFAULT_NETWORK
-
   # Currently only used for Paperless, unknown if it can be used elsewhere
   redis:
     container_name: redis
@@ -256,24 +173,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./redis/data:/data
-    networks:
-      - $DEFAULT_NETWORK
-
-  sdr:
-    image: jketterl/openwebrx:stable
-    container_name: sdr
-    volumes:
-      - ./openwebrx:/var/lib/openwebrx
-    ports:
-      - 8073:8073
-    devices:
-      - "/dev/bus/usb:/dev/bus/usb"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=$DEFAULT_NETWORK"
-      - "traefik.http.routers.sdr.rule=Host(`sdr.$MY_DOMAIN`)"
-      - "traefik.http.routers.sdr.tls.certresolver=dns-cloudflare"
-      - "traefik.http.services.sdr.loadbalancer.server.port=8073"
     networks:
       - $DEFAULT_NETWORK
 
@@ -471,8 +370,4 @@ volumes:
       type: "cifs"
       o: ${CIFS_NAS_CREDENTIALS}
       device: "//${DATABASE_HOSTNAME}/brian-home/Media/Youtube"
-
-  netdata_config:
-  netdata_lib:
-  netdata_cache:
 

@@ -1,10 +1,10 @@
-version: "3"
+version: '3.8'
 services:
   sdr:
     image: jketterl/openwebrx:stable
     container_name: sdr
     volumes:
-      - ./openwebrx:/var/lib/openwebrx
+      - ./data:/var/lib/openwebrx
     ports:
       - 8073:8073
     devices:
@@ -20,5 +20,6 @@ services:
 
 networks:
   traefik_net:
+    name: $DEFAULT_NETWORK
     external: true
 

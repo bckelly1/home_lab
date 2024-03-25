@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  netdata:
+    container_name: netdata
+    restart: always
+    image: netdata/netdata:latest
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor=unconfined
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.netdata.rule=Host(`netdata.$MY_DOMAIN`)"
+      - "traefik.http.routers.netdata.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.netdata.loadbalancer.server.port=19999"
+    volumes:
+      - netdata_config:/etc/netdata
+      - netdata_lib:/var/lib/netdata
+      - netdata_cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /etc/os-release:/host/etc/os-release:ro
+    networks:
+      - $DEFAULT_NETWORK
+
+networks:
+  traefik_net:
+    name: $DEFAULT_NETWORK
+    external: true
+
+volumes:
+  netdata_config:
+  netdata_lib:
+  netdata_cache:
+

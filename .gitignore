@@ -117,7 +117,7 @@
 /openwebrx/openwebrx/
 
 # Portainer -- all sensitive info, default setup from compose is fine
-/portainer/
+/portainer/data/
 
 # Redis
 /redis/
