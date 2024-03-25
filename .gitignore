@@ -111,7 +111,7 @@
 /traefik/appdata/
 
 # Mosquitto -- private info in only useful file
-/mosquitto/
+/mosquitto/data/
 
 # OpenWebRX -- SDR
 /openwebrx/openwebrx/

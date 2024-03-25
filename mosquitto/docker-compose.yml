@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  mosquitto:
+    container_name: mosquitto
+    restart: unless-stopped
+    image: eclipse-mosquitto
+    volumes:
+      - ./data/config:/mosquitto/config
+      - ./data/data:/mosquitto/data
+      - ./data/log:/mosquitto/log
+    ports:
+      - "1883:1883"
+      #- "9001:9001"
+    network_mode: host
+#    networks:
+#      - home_assistant_services
+
+networks:
+  home_assistant_services:
+    name: home_assistant_services
+    external: true

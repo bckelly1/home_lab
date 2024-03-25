@@ -37,16 +37,6 @@ services:
     dns:
       - 192.168.0.12
 
-  mosquitto:
-    container_name: mosquitto
-    restart: unless-stopped
-    image: eclipse-mosquitto 
-    volumes:
-      - ./mosquitto/config:/mosquitto/config
-      - ./mosquitto/data:/mosquitto/data
-      - ./mosquitto/log:/mosquitto/log
-    network_mode: host
-
   paperless:
     container_name: paperless
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
