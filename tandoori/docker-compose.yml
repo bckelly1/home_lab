@@ -5,7 +5,7 @@ services:
     image: vabene1111/recipes
     restart: unless-stopped
     volumes:
-      - ./tandoori/mediafiles:/opt/recipes/mediafiles
+      - ./data/mediafiles:/opt/recipes/mediafiles
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=$DEFAULT_NETWORK"

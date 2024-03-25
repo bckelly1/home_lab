@@ -130,7 +130,8 @@
 /wireguard/data/
 
 # Paperless - no custom config, ignore all
-/paperless/
+/paperless/paperless/
+/paperless/redis/
 
 # Uptime Kuma
 /uptime_kuma/data/

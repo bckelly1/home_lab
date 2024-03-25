@@ -1,0 +1,65 @@
+version: '3.8'
+services:
+  paperless:
+    container_name: paperless
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    user: 0:0
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    security_opt:
+      - apparmor=unconfined
+    volumes:
+      - ./paperless/data:/usr/src/paperless/data
+      - /mnt/nas/home_lab_storage/paperless/media:/usr/src/paperless/media
+      - ./paperless/export:/usr/src/paperless/export
+      - scanned_documents:/usr/src/paperless/consume
+    environment:
+      PAPERLESS_REDIS: redis://redis:6379
+      PAPERLESS_DBHOST: $DATABASE_HOSTNAME
+      PAPERLESS_DBPORT: 3306
+      PAPERLESS_DBUSER: $PAPERLESS_DB_USER
+      PAPERLESS_DBPASS: $PAPERLESS_DB_PASSWORD
+      PAPERLESS_DBENGINE: mariadb
+      PAPERLESS_URL: https://paperless.$MY_DOMAIN
+      PAPERLESS_CONSUMER_RECURSIVE: true
+      PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: true
+      # The UID and GID of the user used to run paperless in the container. Set this
+      # to your UID and GID on the host so that you have write access to the
+      # consumption directory.
+      USERMAP_UID: 0
+      USERMAP_GID: 0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+      - "traefik.http.routers.paperless.rule=Host(`paperless.$MY_DOMAIN`)"
+      - "traefik.http.routers.paperless.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+    networks:
+      - $DEFAULT_NETWORK
+
+  # Currently only used for Paperless, unknown if it can be used elsewhere
+  redis:
+    container_name: redis
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    volumes:
+      - ./redis/data:/data
+    networks:
+      - $DEFAULT_NETWORK
+
+networks:
+  traefik_net:
+    name: $DEFAULT_NETWORK
+    external: true
+
+volumes:
+  # Used to share documents between home_assistant and paperless
+  scanned_documents:
+    external: true
+
