@@ -21,8 +21,8 @@ services:
       - ./home_assistant/shared:/shared
       - /dev/serial/by-id/:/dev/serial/by-id/
       - scanned_documents:/config/scanned_documents
-      - cifs_document_backup:/config/cifs_backup
-      - cifs_image_backup:/config/image_scans
+      - /mnt/nas/scanner_files:/config/cifs_backup
+      - /mnt/nas/Media/Pictures/Scans:/config/image_scans
     privileged: true
     labels:
       - "traefik.enable=true"
@@ -35,7 +35,7 @@ services:
       - $DEFAULT_NETWORK
       - home_assistant_services
     dns:
-      - 192.168.0.12
+      - $DATABASE_HOSTNAME
 
 networks:
   traefik_net:
@@ -54,21 +54,4 @@ volumes:
     external: false
 
   # Backs up documents to the NAS for more permanent storage
-  cifs_document_backup:
-    driver_opts:
-      type: "cifs"
-      o: ${CIFS_NAS_CREDENTIALS}
-      device: "//${DATABASE_HOSTNAME}/brian-home/scanner_files"
-
-  cifs_image_backup:
-    driver_opts:
-      type: "cifs"
-      o: ${CIFS_NAS_CREDENTIALS}
-      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Pictures/Scans"
-
-  cifs_home_lab_storage_tandoori_media:
-    driver_opts:
-      type: "cifs"
-      o: ${CIFS_NAS_CREDENTIALS}
-      device: "//${DATABASE_HOSTNAME}/brian-home/home_lab_storage/tandoori/media"
 
