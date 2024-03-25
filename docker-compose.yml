@@ -47,22 +47,6 @@ services:
       - ./mosquitto/log:/mosquitto/log
     network_mode: host
 
-  nut_server:
-    container_name: nut_server
-    image: instantlinux/nut-upsd:latest
-    restart: always
-    ports:
-      - "3493:3493"
-    environment:
-      - SERIAL=4B2027P52290
-    privileged: true
-    devices:
-      - /dev/ttyUSB1:/dev/ttyUSB1
-    secrets:
-      - nut-upsd-password
-    networks:
-      - nut_server
-
   paperless:
     container_name: paperless
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -117,10 +101,6 @@ services:
     networks:
       - $DEFAULT_NETWORK
 
-secrets:
-  nut-upsd-password:
-    file: ./secrets/nut_server_secret
-
 networks:
   traefik_net:
     name: $DEFAULT_NETWORK
@@ -129,13 +109,11 @@ networks:
     name: home_assistant_services
   nut_server:
     name: nut_server
+    external: true
 
 volumes:
   # Used to share documents between home_assistant and paperless
   scanned_documents:
-
-  # Used to share TV guide between fetcher and Jellyfin
-  tv_guide:
 
   # Backs up documents to the NAS for more permanent storage
   cifs_document_backup:

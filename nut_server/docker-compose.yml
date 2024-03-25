@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  nut_server:
+    container_name: nut_server
+    image: instantlinux/nut-upsd:latest
+    restart: always
+    ports:
+      - "3493:3493"
+    environment:
+      - SERIAL=4B2027P52290
+    privileged: true
+    devices:
+      - /dev/ttyUSB1:/dev/ttyUSB1
+    secrets:
+      - nut-upsd-password
+    networks:
+      - nut_server
+
+secrets:
+  nut-upsd-password:
+    file: ./secrets/nut_server_secret
+
+networks:
+  nut_server:
+    name: nut_server
