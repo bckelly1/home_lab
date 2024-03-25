@@ -9,8 +9,7 @@ services:
       - ./data:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_net"
-      #- "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.portainer.rule=Host(`portainer.$MY_DOMAIN`)"
       - "traefik.http.routers.portainer.tls.certresolver=dns-cloudflare"
       - "traefik.http.routers.portainer.service=portainer"

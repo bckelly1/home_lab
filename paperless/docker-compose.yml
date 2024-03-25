@@ -36,7 +36,7 @@ services:
       USERMAP_GID: 0
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_net"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.paperless.rule=Host(`paperless.$MY_DOMAIN`)"
       - "traefik.http.routers.paperless.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.paperless.loadbalancer.server.port=8000"

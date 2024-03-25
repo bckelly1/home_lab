@@ -22,7 +22,7 @@ services:
       - SNAPSHOT=API
       - IMG_DIR=/img/
     networks:
-      - ${DEFAULT_NETWORK}
+      - $DEFAULT_NETWORK
 
 networks:
   traefik_net:
