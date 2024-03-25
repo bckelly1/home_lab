@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  unifi_poller:
+    container_name: unifi_poller
+    restart: unless-stopped
+    image: golift/unifi-poller:${POLLER_TAG}
+    environment:
+      - UP_INFLUXDB_DB=${INFLUXDB_DB}
+      - UP_INFLUXDB_USER=${INFLUXDB_ADMIN_USER}
+      - UP_INFLUXDB_PASS=${INFLUXDB_ADMIN_PASSWORD}
+      - UP_INFLUXDB_URL=http://${DATABASE_HOSTNAME}:8086
+      - UP_UNIFI_DEFAULT_USER=${UNIFI_USER}
+      - UP_UNIFI_DEFAULT_PASS=${UNIFI_PASS}
+      - UP_UNIFI_DEFAULT_URL=${UNIFI_URL}
+      - UP_POLLER_DEBUG=${POLLER_DEBUG}
+      - UP_UNIFI_DEFAULT_SAVE_DPI=${POLLER_SAVE_DPI}
+
