@@ -4,8 +4,8 @@ services:
     container_name: home_assistant
     restart: unless-stopped
     # This image is referenced mostly statically. It updates pretty quickly and has frequent breaking changes. Review the documentation before upgrading.
-    #image: homeassistant/home-assistant:2024.1
-    image: homeassistant/home-assistant:2024.2
+    #image: homeassistant/home-assistant:2024.2
+    image: homeassistant/home-assistant:2024.3
     devices:
       # Pass down the connection to the USB devices into Home Assistant.
       - /dev/ttyUSB0:/dev/ttyUSB0 # Nortek Z-Wave/Zigbee hub stick
