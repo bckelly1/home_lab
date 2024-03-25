@@ -176,29 +176,6 @@ services:
     networks:
       - $DEFAULT_NETWORK
 
-  tandoori:
-    container_name: tandoori
-    image: vabene1111/recipes
-    restart: unless-stopped
-    volumes:
-      - ./tandoori/mediafiles:/opt/recipes/mediafiles
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=$DEFAULT_NETWORK"
-      - "traefik.http.routers.tandoori.rule=Host(`tandoori.$MY_DOMAIN`)"
-      - "traefik.http.routers.tandoori.tls.certresolver=dns-cloudflare"
-      - "traefik.http.services.tandoori.loadbalancer.server.port=8080"
-    networks:
-      - $DEFAULT_NETWORK
-    environment:
-      - SECRET_KEY=$TANDOOR_SECRET
-      - DB_ENGINE=django.db.backends.postgresql
-      - POSTGRES_HOST=$DATABASE_HOSTNAME
-      - POSTGRES_PORT=5433
-      - POSTGRES_USER=$POSTGRES_TANDOORI_USERNAME
-      - POSTGRES_PASSWORD=$POSTGRES_TANDOORI_PASSWORD
-      - POSTGRES_DB=tandoori
-
   unifi_poller:
     container_name: unifi_poller
     restart: unless-stopped
@@ -213,33 +190,6 @@ services:
       - UP_UNIFI_DEFAULT_URL=${UNIFI_URL}
       - UP_POLLER_DEBUG=${POLLER_DEBUG}
       - UP_UNIFI_DEFAULT_SAVE_DPI=${POLLER_SAVE_DPI}
-
-  uptime_kuma:
-    container_name: uptime_kuma
-    restart: unless-stopped
-    image: louislam/uptime-kuma:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik_net"
-      - "traefik.http.routers.uptime_kuma.rule=Host(`uptime-kuma.$MY_DOMAIN`)"
-      - "traefik.http.routers.uptime_kuma.tls.certresolver=dns-cloudflare"
-      - "traefik.http.services.uptime_kuma.loadbalancer.server.port=3001"
-    volumes:
-      - ./uptime_kuma:/app/data
-    dns:
-      - ${DATABASE_HOSTNAME}
-    networks:
-      - $DEFAULT_NETWORK
-
-  watchtower:
-    image: containrrr/watchtower:latest
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - WATCHTOWER_SCHEDULE=0 0 8 * * *
-      - WATCHTOWER_CLEANUP=true
-    restart: unless-stopped
 
   wireguard:
     image: weejewel/wg-easy

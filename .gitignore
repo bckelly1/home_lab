@@ -132,11 +132,8 @@
 # Paperless - no custom config, ignore all
 /paperless/
 
-# Tandoori - no custom config, ignore all
-/tandoori/
-
 # Uptime Kuma
-/uptime_kuma/
+/uptime_kuma/data/
 
 # Home Lab APIs Repo
 /home_lab_apis/
