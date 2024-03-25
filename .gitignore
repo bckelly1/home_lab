@@ -127,7 +127,7 @@
 /uptime_kuma/*.log
 
 # Wireguard -- all sensitive info
-/wireguard/
+/wireguard/data/
 
 # Paperless - no custom config, ignore all
 /paperless/
