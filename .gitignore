@@ -90,7 +90,7 @@
 /home_assistant/scanned_documents/
 
 # Jellyfin
-/jellyfin/
+/jellyfin/config/
 
 # Linkding
 /linkding/

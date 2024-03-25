@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+  jellyfin:
+    container_name: jellyfin
+    image: lscr.io/linuxserver/jellyfin:latest
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Denver
+      - JELLYFIN_PublishedServerUrl=192.168.0.6
+    volumes:
+      - ./config:/config #media
+      - tv_guide:/data/tv_guide
+      - /mnt/nas/Media/Shows:/data/tvshows
+      - /mnt/nas/Media/Videos:/data/movies
+      - /mnt/nas/Media/Pictures:/data/photos
+      - /mnt/nas/Media/Music:/data/music
+      - /mnt/nas/Media/Youtube:/data/youtube
+    ports:
+      - 8096:8096
+      #- 8920:8920
+      #- 7359:7359
+      #- 1900:1900
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.$MY_DOMAIN`)"
+      - "traefik.http.routers.jellyfin.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+    restart: unless-stopped
+    networks:
+      - $DEFAULT_NETWORK
+
+  tv_guide_fetcher:
+    container_name: tv_guide_fetcher
+    image: shuaiscott/zap2xml:latest
+    restart: always
+    volumes:
+        - tv_guide:/data
+    environment:
+        - SLEEPTIME=86400
+        - USERNAME=$ZAP_USER
+        - PASSWORD=$ZAP_PASSWORD
+        - OPT_ARGS=-I -D -Z $ZAP_ZIP_CODE -S 2
+        - XMLTV_FILENAME=tv_guide.xmlwq
+
+networks:
+  traefik_net:
+    name: $DEFAULT_NETWORK
+    external: true
+  home_assistant_services:
+    name: home_assistant_services
+  nut_server:
+    name: nut_server
+
+volumes:
+  # Used to share TV guide between fetcher and Jellyfin
+  tv_guide:
+

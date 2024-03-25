@@ -37,37 +37,6 @@ services:
     dns:
       - 192.168.0.12
 
-  jellyfin:
-    container_name: jellyfin
-    image: lscr.io/linuxserver/jellyfin:latest
-    environment:
-      - PUID=0
-      - PGID=0
-      - TZ=America/Denver
-      - JELLYFIN_PublishedServerUrl=192.168.0.6
-    volumes:
-      - ./jellyfin/config:/config #media
-      - tv_guide:/data/tv_guide
-      - cifs_home_lab_storage_tv_shows:/data/tvshows
-      - cifs_home_lab_storage_movies:/data/movies
-      - cifs_home_lab_storage_pictures:/data/photos
-      - cifs_home_lab_storage_music:/data/music
-      - cifs_home_lab_storage_youtube:/data/youtube
-    ports:
-      - 8096:8096
-      #- 8920:8920
-      #- 7359:7359
-      #- 1900:1900
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=$DEFAULT_NETWORK"
-      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.$MY_DOMAIN`)"
-      - "traefik.http.routers.jellyfin.tls.certresolver=dns-cloudflare"
-      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
-    restart: unless-stopped
-    networks:
-      - $DEFAULT_NETWORK
-
   mosquitto:
     container_name: mosquitto
     restart: unless-stopped
@@ -148,19 +117,6 @@ services:
     networks:
       - $DEFAULT_NETWORK
 
-  tv_guide_fetcher:
-    container_name: tv_guide_fetcher
-    image: shuaiscott/zap2xml:latest
-    restart: always
-    volumes:
-        - tv_guide:/data
-    environment:
-        - SLEEPTIME=86400
-        - USERNAME=$ZAP_USER
-        - PASSWORD=$ZAP_PASSWORD
-        - OPT_ARGS=-I -D -Z $ZAP_ZIP_CODE -S 2
-        - XMLTV_FILENAME=tv_guide.xmlwq
-
 secrets:
   nut-upsd-password:
     file: ./secrets/nut_server_secret
@@ -205,34 +161,4 @@ volumes:
       type: "cifs"
       o: ${CIFS_NAS_CREDENTIALS}
       device: "//${DATABASE_HOSTNAME}/brian-home/home_lab_storage/tandoori/media"
-
-  cifs_home_lab_storage_movies:
-    driver_opts:
-      type: "cifs"
-      o: ${CIFS_NAS_CREDENTIALS}
-      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Videos"
-
-  cifs_home_lab_storage_tv_shows:
-    driver_opts:
-      type: "cifs"
-      o: ${CIFS_NAS_CREDENTIALS}
-      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Shows"
-
-  cifs_home_lab_storage_music:
-    driver_opts:
-      type: "cifs"
-      o: ${CIFS_NAS_CREDENTIALS}
-      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Music"
-
-  cifs_home_lab_storage_pictures:
-    driver_opts:
-      type: "cifs"
-      o: ${CIFS_NAS_CREDENTIALS}
-      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Pictures"
-
-  cifs_home_lab_storage_youtube:
-    driver_opts:
-      type: "cifs"
-      o: ${CIFS_NAS_CREDENTIALS}
-      device: "//${DATABASE_HOSTNAME}/brian-home/Media/Youtube"
 
