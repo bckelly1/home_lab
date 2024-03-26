@@ -1,0 +1,25 @@
+version: '3'
+services:
+  chronograf:
+    container_name: chronograf
+    image: chronograf:latest
+    restart: unless-stopped
+    volumes:
+      - ./data:/var/lib/chronograf
+    environment:
+      - INFLUXDB_URL=http://${DATABASE_HOSTNAME}:8086
+      - INFLUXDB_USERNAME=${INFLUXDB_ADMIN_USER}
+      - INFLUXDB_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.chronograf.rule=Host(`chronograf.$MY_DOMAIN`)"
+      - "traefik.http.routers.chronograf.tls.certresolver=dns-cloudflare"
+      - "traefik.http.services.chronograf.loadbalancer.server.port=8888"
+    networks:
+      - $DEFAULT_NETWORK
+
+networks:
+  traefik_net:
+    external: true
+

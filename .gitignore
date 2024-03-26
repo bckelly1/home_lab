@@ -15,7 +15,7 @@
 /change_detection/data/
 
 # Chronograf -- no useful files
-/chronograf/
+/chronograf/data/
 
 # Cura
 /cura/cura/
