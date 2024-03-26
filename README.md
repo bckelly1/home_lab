@@ -18,21 +18,20 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * You own a domain name that is configured in Cloudflare.
 * Cloudflare DNS
 * Know a little bit about Docker and [have it installed](https://docs.docker.com/get-docker/).
-* *Optional*: NAS uses a CIFS Share. If you don't want to do a CIFS share, remove the cifs_document_backup volume from home_assistant.
+* *Optional*: NAS uses a CIFS Mount. It's easiest if you have the system mount the share as a volume and then all services 
+that need a network mount can reference it. This avoids having dozens of services have their own CIFS shares active.
 
 ## Setup Instructions
 1. Fill out these example files:
 - `./.env.example` -> `./.env`
 - `./traefik/.env.example` -> `./traefik/.env`
-- `./homer/config/config.yml.example` -> `./homer/config/config.yml`
 - `./databases/.env.example` -> `./databases/.env`
 - `./adguard/config/AdGuardHome.yml.example` -> `./adguard/config/AdGuardHome.yml`
 - `./homer/data/config.yml.example` -> `./homer/data/config.yml` Mostly you just need to replace `exampledomain.com` with whatever your domain is. Homer is very basic, you can't pass it the domain as a var.
 2. In the `./traefik` directory, run `docker compose up -d` to create the traefik config.
 3. In the `./databases` directory (which you can run on this server or elsewhere), run `docker compose up -d`.
-4. In the root directory, trim out whatever services you don't want in the `docker-compose.yml` file.
-5. In the root directory, run `docker compose up -d`
-6. In the `./adguard` directory, run `docker compose up -d` and then view `<ip address>:3000` to view the adguard config. Set up any users and additional config. Set up the DNS rewrites for the subdomains in the `docker-compose.yml` in the root directory.
+4. In the root directory, pick which service you want to use and run. Inside the directory run `docker compose up -d`.
+6. In the `./adguard` directory, run `docker compose up -d` and then view `<ip address>:3000` to view the adguard config. Set up any users and additional config. Set up the DNS rewrites for the subdomains in the `docker-compose.yml` in the application directory you chose in #4.
 7. Navigate to `homer.exampledomain.com (put in your domain)`
 
 ## Services:
