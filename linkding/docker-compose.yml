@@ -15,7 +15,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.linkding.rule=Host(`linkding.$MY_DOMAIN`)"
-      - "traefik.http.routers.linkding.tls.certresolver=dns-cloudflare"
+      #- "traefik.http.routers.linkding.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.linkding.loadbalancer.server.port=9090"
 networks:
   traefik_net:

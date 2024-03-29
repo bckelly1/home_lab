@@ -20,7 +20,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.grafana.rule=Host(`grafana.$MY_DOMAIN`)"
-      - "traefik.http.routers.grafana.tls.certresolver=dns-cloudflare"
+      #- "traefik.http.routers.grafana.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     networks:
       - $DEFAULT_NETWORK

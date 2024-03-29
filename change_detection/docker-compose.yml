@@ -14,7 +14,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.change_detection.rule=Host(`change-detection.$MY_DOMAIN`)"
-      - "traefik.http.routers.change_detection.tls.certresolver=dns-cloudflare"
+      #- "traefik.http.routers.change_detection.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.change_detection.loadbalancer.server.port=5000"
     dns: ${DATABASE_HOSTNAME}
     networks:
