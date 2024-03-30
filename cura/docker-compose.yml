@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   cura:
     image: lscr.io/linuxserver/cura:latest
@@ -21,7 +19,6 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_net"
       - "traefik.http.routers.cura.rule=Host(`cura.$MY_DOMAIN`)"
-      #- "traefik.http.routers.cura.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.cura.loadbalancer.server.port=3000"
 
 networks:

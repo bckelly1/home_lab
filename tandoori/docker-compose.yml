@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   tandoori:
     container_name: tandoori
@@ -10,7 +9,6 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.tandoori.rule=Host(`tandoori.$MY_DOMAIN`)"
-      #- "traefik.http.routers.tandoori.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.tandoori.loadbalancer.server.port=8080"
     networks:
       - $DEFAULT_NETWORK

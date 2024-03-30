@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   nut_server:
     container_name: nut_server

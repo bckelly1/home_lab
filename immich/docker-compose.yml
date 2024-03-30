@@ -1,10 +1,7 @@
-version: "3.8"
-
 services:
   immich-server:
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    #image: ghcr.io/immich-app/immich-server:release
     command: [ "start.sh", "immich" ]
     volumes:
       - cifs_photo_backup:/usr/src/app/upload
@@ -25,13 +22,11 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_net"
       - "traefik.http.routers.immich.rule=Host(`immich.${MY_DOMAIN}`)"
-      #- "traefik.http.routers.immich.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.immich.loadbalancer.server.port=3001"
 
   immich-microservices:
     container_name: immich_microservices
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    #image: ghcr.io/immich-app/immich-server:release
     command: [ "start.sh", "microservices" ]
     volumes:
       - cifs_photo_backup:/usr/src/app/upload
@@ -47,7 +42,6 @@ services:
   immich-machine-learning:
     container_name: immich_machine_learning
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
-    #image: ghcr.io/immich-app/immich-machine-learning:release
     volumes:
       - model-cache:/cache
     env_file:

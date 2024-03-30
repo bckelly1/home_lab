@@ -1,4 +1,3 @@
-version: '3'
 services:
   chronograf:
     container_name: chronograf
@@ -14,7 +13,6 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.chronograf.rule=Host(`chronograf.$MY_DOMAIN`)"
-      #- "traefik.http.routers.chronograf.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.chronograf.loadbalancer.server.port=8888"
     networks:
       - $DEFAULT_NETWORK

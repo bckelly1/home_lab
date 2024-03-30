@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   unifi_poller:
     container_name: unifi_poller

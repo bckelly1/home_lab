@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   home_assistant:
     container_name: home_assistant
@@ -28,7 +27,6 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.home_assistant.rule=Host(`home-assistant.$MY_DOMAIN`)"
-      #- "traefik.http.routers.home_assistant.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.home_assistant.loadbalancer.server.port=8123"
     networks:
       - nut_server

@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   # Password Manager
   bitwarden:
@@ -13,7 +12,6 @@ services:
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.enable=true"
       - "traefik.http.routers.bitwarden.rule=Host(`bitwarden.$MY_DOMAIN`)"
-      #- "traefik.http.routers.bitwarden.tls.certresolver=dns-cloudflare"
     networks:
       - $DEFAULT_NETWORK
 

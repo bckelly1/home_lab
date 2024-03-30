@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   ghost:
     container_name: ghost
@@ -23,7 +22,6 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.ghost.rule=Host(`blog.$MY_DOMAIN`)"
-      #- "traefik.http.routers.ghost.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.ghost.loadbalancer.server.port=2368"
     networks:
       - $DEFAULT_NETWORK

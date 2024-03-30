@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   homer:
     image: b4bz/homer:latest
@@ -10,7 +9,6 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=$DEFAULT_NETWORK"
       - "traefik.http.routers.homer.rule=Host(`homer.$MY_DOMAIN`)"
-      #- "traefik.http.routers.homer.tls.certresolver=dns-cloudflare"
       - "traefik.http.services.homer.loadbalancer.server.port=8080"
     networks:
       - $DEFAULT_NETWORK
