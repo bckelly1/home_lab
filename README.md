@@ -19,7 +19,16 @@ Drop into the `adguard` folder to spin up your AdGuardHome server from there.
 * Cloudflare DNS
 * Know a little bit about Docker and [have it installed](https://docs.docker.com/get-docker/).
 * *Optional*: NAS uses a CIFS Mount. It's easiest if you have the system mount the share as a volume and then all services 
-that need a network mount can reference it. This avoids having dozens of services have their own CIFS shares active.
+that need a network mount can reference it. This avoids having dozens of services have their own CIFS shares active. To set up a CIFS mount on boot, add this to /etc/fstab:
+```
+# Mount the nas on startup
+//<IP ADDRESS>/<Mount Name> /mnt/nas cifs credentials=/PATH/TO/CREDENTIALS/FILE/.cifs-nas 0 0
+```
+And the credentials file (.cifs-nas) should have:
+```
+username=<Mount Username>
+password=<Mount Password>
+```
 
 ## Setup Instructions
 1. Fill out these example files:
@@ -56,6 +65,7 @@ that need a network mount can reference it. This avoids having dozens of service
 * [paperless](https://github.com/paperless-ngx/paperless-ngx) - Optical Character Recognition tools used for tagging and cataloging documents (PDF, Word, Excel, etc)
 * [portainer](https://github.com/portainer/portainer) - Monitors the health, status and configuration of all Docker containers.
 * [redis](https://github.com/redis/redis) - Caching system for paperless
+* [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF/tree/main) - Tool for splitting, merging, modifying, managing PDF files.
 * [tandoori](https://github.com/TandoorRecipes/recipes) - Recipe manager! All Interesting recipes are saved here.
 * [unifi_poller](https://github.com/unpoller/unpoller) - Monitors every metric possible from the Unifi Dream Machine Pro. Client metrics, Deep Packet Inspection, total network traffic, etc.
 * [uptime_kuma](https://github.com/louislam/uptime-kuma) - Monitors all home services (docker containers) as well as any external websites.
@@ -65,16 +75,16 @@ that need a network mount can reference it. This avoids having dozens of service
 * [zap2xml](https://github.com/jef/zap2xml) - Downloads a TV guide for your local broadcasts so Jellyfin can show a guide and be able to tune into Over-The-Air broadcasts.
 
 
-* [traefik](https://github.com/traefik/traefik) - network proxy. Allows all services to share an HTTP endpoint (80/443) rather than all services running on their own ports/colliding. It also manages SSL for all services that are connected
+* [traefik](https://github.com/traefik/traefik) - network proxy. Allows all services to share an HTTP endpoint (80/443) rather than all services running on their own ports/colliding. It also manages SSL for all services that are connected. When Traefik is initially started, allow it to pull the wildcard SSL cert. Check in the acme.json file for a wildcard cert. Once it appears, you can then add whatever services you want and they will all use the wildcard cert.
 
 
 ### Labels
-In every docker service there is a section called labels. This is how the container "registers" with traefik to use SSL and get it's connection proxied. You need five labels for every service:
+In every docker service there is a section called labels. This is how the container "registers" with traefik to use SSL and get it's connection proxied. You need four labels for every service:
 ```
 - "traefik.enable=true" # Says yes, I want this service in Traefik
 - "traefik.docker.network=$DEFAULT_NETWORK" # This is the Traefik Network in docker
 - "traefik.http.routers.grafana.rule=Host(`grafana.$MY_DOMAIN`)" # Subdomain that you want. Remember to change the router in the label name!
-- "traefik.http.routers.grafana.tls.certresolver=dns-cloudflare" # What certificate resolver you want Traefik to use.
+- "traefik.http.routers.grafana.tls.certresolver=dns-cloudflare" # OPTIONAL: What certificate resolver you want the service to use. If you set this, you will get a dedicated cert, not the wildcard cert.
 - "traefik.http.services.grafana.loadbalancer.server.port=3000" # What HTTP port the service typically runs on
 ```
 Most services are very upfront about what port they use for the UI, but you may need to check the Dockerfile in the service to see what they expose.
@@ -99,7 +109,6 @@ I welcome suggestions! I am always looking to improve my stack, configuration an
 ## Future
 - Geo trackers - Google kind of gets there but I'm not super pleased with that.
 - Health trackers - Apple probably has the best ones on the market right now but I would prefer a fully local system.
-- SSL Wildcards - Not sure if they're working correctly, in theory they should work but they haven't yet.
 
 
 
