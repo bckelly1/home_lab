@@ -1,0 +1,6 @@
+#!/bin/bash
+input="./active_services"
+while IFS= read -r line
+do
+  cd $line && docker compose stop && cd ..
+done < "$input"

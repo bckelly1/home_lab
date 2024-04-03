@@ -1,0 +1,14 @@
+[jellyfin]
+
+backend = auto
+enabled = true
+port = 8096
+protocol = tcp
+filter = jellyfin
+maxretry = 3
+bantime = 86400
+findtime = 43200
+#logpath = /config/logs/jellyfin*.log
+#logpath = /config/log/log*.log
+logpath = /home/brian/git/home_lab/jellyfin/config/log/log*.log
+action = iptables-allports[name=jellyfin, chain=DOCKER-USER]

@@ -1,6 +1,7 @@
 services:
   wireguard:
-    image: weejewel/wg-easy
+    #image: weejewel/wg-easy
+    image: ghcr.io/wg-easy/wg-easy
     container_name: wireguard
     cap_add:
       - NET_ADMIN
