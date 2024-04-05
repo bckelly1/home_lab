@@ -87,6 +87,14 @@ In every docker service there is a section called labels. This is how the contai
 - "traefik.http.routers.grafana.tls.certresolver=dns-cloudflare" # OPTIONAL: What certificate resolver you want the service to use. If you set this, you will get a dedicated cert, not the wildcard cert.
 - "traefik.http.services.grafana.loadbalancer.server.port=3000" # What HTTP port the service typically runs on
 ```
+
+If you want to add basic auth in front of a service, add these labels to the docker labels of the container:
+```angular2html
+- "traefik.http.middlewares.auth.basicauth.users=test:$$2y$$12$$ci.4U63YX83CwkyUrjqxAucnmi2xXOIlEF6T/KdP9824f1Rf1iyNG"
+- "traefik.http.routers.SERVICENAME.middlewares=auth"
+```
+[This site](https://bcrypt-generator.com/ will generate passwords for users. The above username and password is test/test.
+
 Most services are very upfront about what port they use for the UI, but you may need to check the Dockerfile in the service to see what they expose.
 
 ## Cronjobs
