@@ -1,6 +1,7 @@
 services:
   cura:
-    image: lscr.io/linuxserver/cura:latest
+    #image: lscr.io/linuxserver/cura:latest
+    image: lscr.io/linuxserver/cura:5.6.0-ls17
     container_name: cura
     security_opt:
       - seccomp:unconfined #optional

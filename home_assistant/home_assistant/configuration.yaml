@@ -3,6 +3,8 @@
 default_config:
 
 homeassistant:
+  external_url: !secret home_assistant_external_url
+  internal_url: !secret home_assistant_internal_url
   whitelist_external_dirs:
     - /config/photos/
 # Text to speech

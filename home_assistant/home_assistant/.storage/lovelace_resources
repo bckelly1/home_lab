@@ -5,7 +5,7 @@
   "data": {
     "items": [
       {
-        "url": "/hacsfiles/mini-graph-card/mini-graph-card-bundle.js?hacstag=1512800620110",
+        "url": "/hacsfiles/mini-graph-card/mini-graph-card-bundle.js?hacstag=1512800620121",
         "type": "module",
         "id": "521f83536bdf4b4a84bf9a71ab80b32f"
       },
@@ -20,7 +20,7 @@
         "id": "1a2648fc1bee403cb65d808455e8e4da"
       },
       {
-        "url": "/hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js?hacstag=178921037450",
+        "url": "/hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js?hacstag=178921037451",
         "type": "module",
         "id": "200f53c7f17b450cbc02a6d6cb3d43d7"
       },

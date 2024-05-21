@@ -39,7 +39,7 @@ feed_the_cat_script:
   - delay:
       hours: 0
       minutes: 0
-      seconds: 4
+      seconds: 3
       milliseconds: 0
   - type: turn_off
     device_id: 6d62eaa54b50998824c1530efb43bd17
@@ -56,7 +56,8 @@ play_song_for_rome_on_kid_1_echo_dot:
         type: tts
   - service: media_player.play_media
     data:
-      media_content_id: Song For Rome by Brian Crain
+      #media_content_id: Song For Rome by Brian Crain
+      media_content_id: Sleep
       media_content_type: AMAZON_MUSIC
     target:
       device_id: 897ec3529a673b81e2a408068cc03811
@@ -221,3 +222,4 @@ play_song_for_rome_on_kid_2_echo_dot:
       target:
         entity_id: media_player.brian_s_2nd_echo_dot
   mode: single
+
