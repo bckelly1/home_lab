@@ -149,6 +149,14 @@ shut_down_for_the_night:
           device_id: 7b1a06bd4ebf3985240a0ddc2e492b63
           entity_id: 5f9ffbbde1cb731008b3b856e778638d
           domain: switch
+    - type: turn_off
+      device_id: c1917463e7192c3548abe8e9b9a09702
+      entity_id: 54559d9ffa9c0084df37fd4fb1c621e6
+      domain: switch
+    - type: turn_off
+      device_id: 55c091cb7822b1e190a2e16bb7aa0795
+      entity_id: ba24f84727d3eaee221d3051760d6957
+      domain: light
   mode: single
 
 toggle_garage_1_button:
@@ -222,4 +230,33 @@ play_song_for_rome_on_kid_2_echo_dot:
       target:
         entity_id: media_player.brian_s_2nd_echo_dot
   mode: single
+
+play_song_for_rome_on_kid_2_echo_dot_repeat:
+  alias: Play Song For Rome On Kid 2 Echo Dot Repeat
+  sequence:
+    - repeat:
+        count: 15
+        sequence:
+          - if:
+              - condition: state
+                entity_id: input_boolean.turn_on_kid_2_song_repeat
+                state: "on"
+            then:
+              - service: media_player.play_media
+                target:
+                  device_id: 165d0ccd7ebaee21bf57be755cf342b9
+                data:
+                  media_content_id: Song For Rome
+              - delay:
+                  hours: 0
+                  minutes: 4
+                  seconds: 0
+                  milliseconds: 0
+    - service: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.turn_on_kid_2_song_repeat
+  mode: single
+  icon: mdi:music-note
 

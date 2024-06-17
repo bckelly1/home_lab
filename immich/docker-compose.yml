@@ -2,7 +2,6 @@ services:
   immich-server:
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    command: [ "start.sh", "immich" ]
     volumes:
       - cifs_photo_backup:/usr/src/app/upload
       - cifs_home_pictures:/mnt/media/external_library:ro
@@ -23,21 +22,6 @@ services:
       - "traefik.docker.network=traefik_net"
       - "traefik.http.routers.immich.rule=Host(`immich.${MY_DOMAIN}`)"
       - "traefik.http.services.immich.loadbalancer.server.port=3001"
-
-  immich-microservices:
-    container_name: immich_microservices
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    command: [ "start.sh", "microservices" ]
-    volumes:
-      - cifs_photo_backup:/usr/src/app/upload
-      - cifs_home_pictures:/mnt/media/external_library:ro
-    env_file:
-      - .env
-    depends_on:
-      - redis
-    restart: always
-    networks:
-      - immich_net
 
   immich-machine-learning:
     container_name: immich_machine_learning

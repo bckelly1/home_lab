@@ -8,6 +8,11 @@
         "id": "turn_on_baby_candle",
         "name": "Turn on Baby Candle",
         "icon": "mdi:candle"
+      },
+      {
+        "id": "turn_on_kid_2_song_repeat",
+        "name": "turn_on_kid_2_song_repeat",
+        "icon": "mdi:music-note"
       }
     ]
   }

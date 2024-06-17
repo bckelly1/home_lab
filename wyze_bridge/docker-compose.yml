@@ -11,6 +11,7 @@ services:
     environment:
       - WYZE_EMAIL=$WYZE_EMAIL
       - WYZE_PASSWORD=$WYZE_PASSWORD
+      - WB_AUTH=False
       - ENABLE_AUDIO=true
       - IGNORE_OFFLINE=true
       - FPS_FIX=true

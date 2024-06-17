@@ -127,6 +127,8 @@ http:
     - 127.0.0.0/24
 
 rest_command:
+  call_transaction_importer:
+    url: !secret transaction_import_spring_url
   call_gmail_poller:
     url: !secret transaction_import_url
   call_gmail_daycare_poller:
