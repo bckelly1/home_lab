@@ -32,20 +32,23 @@ s_2:
 feed_the_cat_script:
   alias: Feed the cat
   sequence:
-  - type: turn_on
-    device_id: 6d62eaa54b50998824c1530efb43bd17
-    entity_id: switch.plug_3
-    domain: switch
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 3
-      milliseconds: 0
-  - type: turn_off
-    device_id: 6d62eaa54b50998824c1530efb43bd17
-    entity_id: switch.plug_3
-    domain: switch
+    - service: switch.turn_on
+      metadata: {}
+      data: {}
+      target:
+        device_id: 6d62eaa54b50998824c1530efb43bd17
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 3
+        milliseconds: 0
+    - service: switch.turn_off
+      target:
+        device_id:
+          - 6d62eaa54b50998824c1530efb43bd17
+      data: {}
   mode: single
+  description: ""
 play_song_for_rome_on_kid_1_echo_dot:
   alias: !secret kid_1_bedtime_song_alias
   sequence:
@@ -56,8 +59,8 @@ play_song_for_rome_on_kid_1_echo_dot:
         type: tts
   - service: media_player.play_media
     data:
-      #media_content_id: Song For Rome by Brian Crain
-      media_content_id: Sleep
+      media_content_id: Song For Rome by Brian Crain
+      #media_content_id: Sleep
       media_content_type: AMAZON_MUSIC
     target:
       device_id: 897ec3529a673b81e2a408068cc03811
@@ -246,7 +249,8 @@ play_song_for_rome_on_kid_2_echo_dot_repeat:
                 target:
                   device_id: 165d0ccd7ebaee21bf57be755cf342b9
                 data:
-                  media_content_id: Song For Rome
+                  media_content_id: Song For Rome by Brian Crain
+                  media_content_type: AMAZON_MUSIC
               - delay:
                   hours: 0
                   minutes: 4

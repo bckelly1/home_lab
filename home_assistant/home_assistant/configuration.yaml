@@ -5,7 +5,7 @@ default_config:
 homeassistant:
   external_url: !secret home_assistant_external_url
   internal_url: !secret home_assistant_internal_url
-  whitelist_external_dirs:
+  allowlist_external_dirs:
     - /config/photos/
 # Text to speech
 tts:
@@ -16,9 +16,9 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
-bhyve:
-  username: !secret bhyve_username
-  password: !secret bhyve_password
+#bhyve:
+#  username: !secret bhyve_username
+#  password: !secret bhyve_password
 
 input_select:
   destination:
@@ -129,10 +129,9 @@ http:
 rest_command:
   call_transaction_importer:
     url: !secret transaction_import_spring_url
-  call_gmail_poller:
-    url: !secret transaction_import_url
   call_gmail_daycare_poller:
     url: !secret daycare_import_url
-
+  call_balance_importer:
+    url: !secret balance_import_url
 
 

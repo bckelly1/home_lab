@@ -11,6 +11,8 @@ services:
     environment:
       - WYZE_EMAIL=$WYZE_EMAIL
       - WYZE_PASSWORD=$WYZE_PASSWORD
+      - API_KEY=$API_KEY
+      - API_ID=$API_ID
       - WB_AUTH=False
       - ENABLE_AUDIO=true
       - IGNORE_OFFLINE=true
