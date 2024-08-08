@@ -15,9 +15,11 @@ PAPERLESS_SCAN_DIR = os.environ.get('PAPERLESS_DIR', './')
 
 
 def image_backup(name, get_response):
-    scanned_dir = "/config/image_scans/"
-    f = open(scanned_dir + name, "wb")
+    f = open(name, "wb")
     f.write(get_response.content)
+
+    shutil.copy(name, IMAGE_SCAN_DIR)
+    shutil.copy(name, PAPERLESS_SCAN_DIR)
 
 
 def document_backup(name, get_response):
