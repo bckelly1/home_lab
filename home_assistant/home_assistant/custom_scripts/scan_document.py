@@ -30,6 +30,17 @@ def document_backup(name, get_response):
     shutil.copy(name, PAPERLESS_SCAN_DIR)
 
 
+def get_file_name(scan_type):
+    scan_type = scan_type.lower()
+    if scan_type == 'jpeg-pdf':
+        scan_type = 'jpeg'
+
+    random = str(uuid.uuid4())
+    name = "scanned-" + random + "." + scan_type
+    print(name)
+    return name
+
+
 parser = argparse.ArgumentParser("scanner_runner")
 parser.add_argument("scan_type", help="What kind of scan will it be? pdf, jpeg, jpeg-pdf", type=str)
 args = parser.parse_args()
@@ -59,9 +70,7 @@ job_id = location.split('/')[-1]
 url = jobs_url + "/" + job_id + "/Pages/1"
 get_response = requests.get(url, verify=False)
 
-random = str(uuid.uuid4())
-name = "scanned-" + random + "." + scan_type.lower()
-print(name)
+name = get_file_name(scan_type)
 
 if scan_type == 'pdf' or scan_type == 'jpeg-pdf':
     document_backup(name, get_response)
