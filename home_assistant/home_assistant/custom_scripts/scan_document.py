@@ -31,7 +31,7 @@ def document_backup(name, get_response):
 
 
 parser = argparse.ArgumentParser("scanner_runner")
-parser.add_argument("scan_type", help="What kind of scan will it be? pdf, Jpeg", type=str)
+parser.add_argument("scan_type", help="What kind of scan will it be? pdf, jpeg, jpeg-pdf", type=str)
 args = parser.parse_args()
 
 scan_type = args.scan_type.lower()
@@ -39,7 +39,7 @@ scan_type = args.scan_type.lower()
 if scan_type == 'pdf':
     print('Running a document scan..')
     post_body = '<scan:ScanJob xmlns:scan="http://www.hp.com/schemas/imaging/con/cnx/scan/2008/08/19" xmlns:dd="http://www.hp.com/schemas/imaging/con/dictionaries/1.0/" xmlns:fw="http://www.hp.com/schemas/imaging/con/firewall/2011/01/05"><scan:XResolution>300</scan:XResolution><scan:YResolution>300</scan:YResolution><scan:XStart>0</scan:XStart><scan:YStart>0</scan:YStart><scan:Width>2550</scan:Width><scan:Height>3300</scan:Height><scan:Format>Pdf</scan:Format><scan:CompressionQFactor>0</scan:CompressionQFactor><scan:ColorSpace>Color</scan:ColorSpace><scan:BitDepth>8</scan:BitDepth><scan:InputSource>Platen</scan:InputSource><scan:GrayRendering>NTSC</scan:GrayRendering><scan:ToneMap><scan:Gamma>1000</scan:Gamma><scan:Brightness>1000</scan:Brightness><scan:Contrast>1000</scan:Contrast><scan:Highlite>179</scan:Highlite><scan:Shadow>25</scan:Shadow></scan:ToneMap><scan:ContentType>Document</scan:ContentType></scan:ScanJob>'
-elif scan_type == 'jpeg':
+elif scan_type == 'jpeg' or scan_type == 'jpeg-pdf':
     print('Running an image scan...')
     post_body = '<scan:ScanJob xmlns:scan="http://www.hp.com/schemas/imaging/con/cnx/scan/2008/08/19" xmlns:dd="http://www.hp.com/schemas/imaging/con/dictionaries/1.0/" xmlns:fw="http://www.hp.com/schemas/imaging/con/firewall/2011/01/05"><scan:XResolution>600</scan:XResolution><scan:YResolution>600</scan:YResolution><scan:XStart>0</scan:XStart><scan:YStart>0</scan:YStart><scan:Width>3000</scan:Width><scan:Height>5000</scan:Height><scan:Format>Jpeg</scan:Format><scan:CompressionQFactor>0</scan:CompressionQFactor><scan:ColorSpace>Color</scan:ColorSpace><scan:BitDepth>8</scan:BitDepth><scan:InputSource>Platen</scan:InputSource><scan:GrayRendering>NTSC</scan:GrayRendering><scan:ToneMap><scan:Gamma>1000</scan:Gamma><scan:Brightness>1000</scan:Brightness><scan:Contrast>1000</scan:Contrast><scan:Highlite>179</scan:Highlite><scan:Shadow>25</scan:Shadow></scan:ToneMap><scan:ContentType>Photo</scan:ContentType></scan:ScanJob>'
 else:
@@ -63,7 +63,7 @@ random = str(uuid.uuid4())
 name = "scanned-" + random + "." + scan_type.lower()
 print(name)
 
-if scan_type == 'pdf':
+if scan_type == 'pdf' or scan_type == 'jpeg-pdf':
     document_backup(name, get_response)
 elif scan_type == 'jpeg':
     image_backup(name, get_response)
