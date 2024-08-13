@@ -196,10 +196,22 @@ toggle_garage_2_button:
     entity_id: switch.garage_2
     domain: switch
   mode: single
+scan_to_backup:
+  alias: Scan to Backup
+  sequence:
+  - service: shell_command.run_scan_backup
+    data: {}
+  mode: single
 scan_the_printer:
-  alias: scan the printer
+  alias: Scan the printer
   sequence:
   - service: shell_command.run_scan_document
+    data: {}
+  mode: single
+scan_hq_backup:
+  alias: Scan a high quality to backup
+  sequence:
+  - service: shell_command.run_scan_hq_backup
     data: {}
   mode: single
 scan_image_on_printer:
