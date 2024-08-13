@@ -17,6 +17,13 @@ HOST_ADDRESS='192.168.2.19'
 JOBS_URL = "http://" + HOST_ADDRESS + "/Scan/Jobs"
 
 
+def general_backup(name, get_response):
+    f = open(name, "wb")
+    f.write(get_response.content)
+
+    shutil.copy(name, DOCUMENT_SCAN_DIR)
+
+
 def image_backup(name, get_response):
     f = open(name, "wb")
     f.write(get_response.content)
@@ -74,11 +81,13 @@ def save_file(destination, name, get_response):
         document_backup(name, get_response)
     elif destination == 'images':
         image_backup(name, get_response)
+    elif destination == 'backup':
+        general_backup(name, get_response)
 
 
 parser = argparse.ArgumentParser("scanner_runner")
 parser.add_argument("output_type", help="What kind of scan will it be? pdf, jpeg", type=str)
-parser.add_argument("destination", help="Which folder will it go to? docs images", type=str)
+parser.add_argument("destination", help="Which folder will it go to? docs images backup", type=str)
 parser.add_argument("resolution", help="High or Low Resolution? high low", type=str)
 args = parser.parse_args()
 
