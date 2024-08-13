@@ -76,8 +76,8 @@ def save_file(destination, name, get_response):
 
 
 parser = argparse.ArgumentParser("scanner_runner")
-parser.add_argument("-o", "output_type", help="What kind of scan will it be? pdf, jpeg", type=str)
-parser.add_argument("-d", "destination", help="Which folder will it go to? docs images", type=str)
+parser.add_argument("output_type", help="What kind of scan will it be? pdf, jpeg", type=str)
+parser.add_argument("destination", help="Which folder will it go to? docs images", type=str)
 parser.add_argument("resolution", help="High or Low Resolution? high low", type=str)
 args = parser.parse_args()
 

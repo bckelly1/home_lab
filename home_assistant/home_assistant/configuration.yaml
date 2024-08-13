@@ -100,9 +100,9 @@ notify:
 
 shell_command:
   mount_nas_folder: !secret nas_mount_command
-  run_scan_document: python3 /config/custom_scripts/scan_document.py Pdf &
-  run_scan_image: python3 /config/custom_scripts/scan_document.py jpeg &
-  run_scan_image_document: python3 /config/custom_scripts/scan_document.py jpeg-pdf &
+  run_scan_document: python3 /config/custom_scripts/scan_document.py jpeg docs low &
+  run_scan_image: python3 /config/custom_scripts/scan_document.py jpeg images high &
+  run_scan_image_document: python3 /config/custom_scripts/scan_document.py jpeg docs low &
 
 lutron_caseta:
   host: 192.168.0.8
