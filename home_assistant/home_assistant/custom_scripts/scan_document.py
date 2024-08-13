@@ -41,7 +41,7 @@ def get_file_name(scan_type):
 
 
 def format_body_content(output_type, resolution):
-    resolution_values = {'high': {'width': '2550', 'height': '3300', 'resolution': '600'}, 'low': {'width': '1500', 'height': '3000', 'resolution': '300'}}
+    resolution_values = {'high': {'width': '2550', 'height': '3300', 'resolution': '600'}, 'low': {'width': '2550', 'height': '3300', 'resolution': '300'}}
     format = {'pdf': 'Pdf', 'jpeg': 'Jpeg'}
     content_type = {'pdf': 'Document', 'jpeg': 'Photo'}
     post_body = '<scan:ScanJob xmlns:scan="http://www.hp.com/schemas/imaging/con/cnx/scan/2008/08/19" xmlns:dd="http://www.hp.com/schemas/imaging/con/dictionaries/1.0/" xmlns:fw="http://www.hp.com/schemas/imaging/con/firewall/2011/01/05"> <scan:XResolution>{{ resolution }}</scan:XResolution> <scan:YResolution>{{ resolution }}</scan:YResolution> <scan:XStart>0</scan:XStart> <scan:YStart>0</scan:YStart> <scan:Width>{{ width }}</scan:Width> <scan:Height>{{ height }}</scan:Height> <scan:Format>{{ format }}</scan:Format> <scan:CompressionQFactor>0</scan:CompressionQFactor> <scan:ColorSpace>Color</scan:ColorSpace> <scan:BitDepth>8</scan:BitDepth> <scan:InputSource>Platen</scan:InputSource> <scan:GrayRendering>NTSC</scan:GrayRendering> <scan:ToneMap> <scan:Gamma>1000</scan:Gamma> <scan:Brightness>1000</scan:Brightness> <scan:Contrast>1000</scan:Contrast> <scan:Highlite>179</scan:Highlite> <scan:Shadow>25</scan:Shadow> </scan:ToneMap> <scan:ContentType>{{ content_type }}</scan:ContentType> </scan:ScanJob>'
