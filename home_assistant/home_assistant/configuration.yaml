@@ -142,5 +142,6 @@ rest_command:
     method: post
     content_type: "application/json"
     payload: "{\"outputType\": \"jpeg\",\"destination\":\"docs\",\"resolution\": \"high\"}"
+    timeout: 90
 
 
