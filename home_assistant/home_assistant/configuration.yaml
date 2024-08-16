@@ -137,4 +137,10 @@ rest_command:
   call_balance_importer:
     url: !secret balance_import_url
 
+  scan_printer:
+    url: https://printer-manager.setupjustforme.com/api/scanner/scan
+    method: post
+    content_type: "application/json"
+    payload: "{\"outputType\": \"jpeg\",\"destination\":\"docs\",\"resolution\": \"high\"}"
+
 
