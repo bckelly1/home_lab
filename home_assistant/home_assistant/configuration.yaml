@@ -42,7 +42,7 @@ sensor:
           {% else %}
             {% set st = state_attr('calendar.denver_broncos', 'start_time') %}
             {% if st != None %}
-              {{ as_timestamp(st)  | timestamp_custom("%A, %b %d at %-I:%M %p") }}
+              {{ as_timestamp(st) | timestamp_custom("%A, %b %d at %I:%M %p", false) | replace(" UTC", " MST") }}
             {% else %}
               No games scheduled
             {% endif %}
