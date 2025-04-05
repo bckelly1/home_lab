@@ -8,7 +8,7 @@ services:
       - SYS_MODULE
     environment:
       - WG_HOST=crazycat.${MY_DOMAIN}
-      - PASSWORD=${WIREGUARD_PASSWORD}
+      - PASSWORD_HASH=${PASSWORD_HASH}
       - WG_DEFAULT_DNS=${DATABASE_HOSTNAME}
     volumes:
       - ./data:/etc/wireguard

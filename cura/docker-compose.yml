@@ -11,6 +11,7 @@ services:
       - TZ=Etc/UTC
     volumes:
       - ./cura:/config
+      - /mnt/nas/3d_printer_files:/models
     ports:
       - 4000:3000
     restart: unless-stopped

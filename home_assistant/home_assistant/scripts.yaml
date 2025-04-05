@@ -95,6 +95,7 @@ shut_down_for_the_night:
       device_id: ecba7d7b16331751f9a7c799f1ef5ec9
       entity_id: light.tasmota
       domain: light
+      enabled: false
     - type: turn_on
       device_id: dd5b8d74b7a448094d60f928b8fc3516
       entity_id: switch.g4_doorbell_privacy_mode
@@ -159,6 +160,10 @@ shut_down_for_the_night:
     - type: turn_off
       device_id: 55c091cb7822b1e190a2e16bb7aa0795
       entity_id: ba24f84727d3eaee221d3051760d6957
+      domain: light
+    - type: turn_off
+      device_id: 6e753594f95e97d014197cc4290a5c3f
+      entity_id: 390bbd1e3c553a2b7af52a6b2bdc2460
       domain: light
   mode: single
 

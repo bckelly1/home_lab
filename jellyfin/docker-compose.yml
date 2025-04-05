@@ -15,6 +15,7 @@ services:
       - /mnt/nas/Media/Pictures:/data/photos
       - /mnt/nas/Media/Music:/data/music
       - /mnt/nas/Media/Youtube:/data/youtube
+      - /mnt/nas/Media/arrs:/data/arrs
     ports:
       - 8096:8096
     labels:

@@ -29,6 +29,15 @@
         "show_in_sidebar": true,
         "require_admin": false,
         "mode": "storage"
+      },
+      {
+        "id": "dashboard_chores",
+        "show_in_sidebar": true,
+        "icon": "mdi:broom",
+        "title": "Chores",
+        "require_admin": false,
+        "mode": "storage",
+        "url_path": "dashboard-chores"
       }
     ]
   }

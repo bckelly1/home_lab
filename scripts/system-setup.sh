@@ -8,11 +8,12 @@ sudo apt install -y \
 	cifs-utils \
 	git \
 	docker-ce \
-	iconfig \
+	net-tools \
 	nmap \
+	mariadb-client \
 	htop \
 	vim \
 	unattended-upgrades
 
-sudo cp ./logrotate.conf /etc/logrotate.d/
+sudo cp ./logrotate.config /etc/logrotate.d/
 

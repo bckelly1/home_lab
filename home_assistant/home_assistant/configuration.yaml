@@ -37,10 +37,10 @@ sensor:
         #entity_id: calendar.denver_broncos
         friendly_name: Broncos next game
         value_template: >-
-          {% if is_state('calendar.denver_broncos', 'on') %}
+          {% if is_state('calendar.denver_broncos_2', 'on') %}
             Playing Now
           {% else %}
-            {% set st = state_attr('calendar.denver_broncos', 'start_time') %}
+            {% set st = state_attr('calendar.denver_broncos_2', 'start_time') %}
             {% if st != None %}
               {{ as_timestamp(st) | timestamp_custom("%A, %b %d at %I:%M %p", false) | replace(" UTC", " MST") }}
             {% else %}
@@ -55,7 +55,7 @@ sensor:
         #entity_id: calendar.denver_broncos
         friendly_name: Broncos Next Opponent
         value_template: >-
-          {{ states.calendar.denver_broncos.attributes.message }}
+          {{ states.calendar.denver_broncos_2.attributes.message }}
 
 #fastdotcom:
 #  scan_interval:
@@ -126,6 +126,7 @@ http:
     - 192.168.0.240
     - 172.31.0.0/24
     - 172.21.0.0/24
+    - 172.23.0.0/24
     - 172.20.0.0/24
     - 127.0.0.0/24
 
