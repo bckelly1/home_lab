@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# File that contains the list of directories
+file="active_services"  # Replace with your file path
+
+# Check if the file exists
+if [ ! -f "$file" ]; then
+  echo "File $file not found!"
+  exit 1
+fi
+
+# Iterate over each line in the file
+while IFS= read -r dir; do
+  if [ -d "$dir" ]; then
+    echo "Entering directory: $dir"
+    cd "$dir" || { echo "Failed to cd into $dir"; exit 1; }
+    
+    # Run docker-compose up
+    echo "Running 'docker compose stop' in $dir"
+    docker compose stop
+    
+    # Go back to the parent directory
+    cd - > /dev/null
+  else
+    echo "Directory $dir does not exist."
+  fi
+done < "$file"
+

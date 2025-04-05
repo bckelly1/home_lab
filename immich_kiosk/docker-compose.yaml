@@ -1,0 +1,27 @@
+services:
+  immich-kiosk:
+    image: damongolding/immich-kiosk:latest
+    container_name: immich-kiosk
+    tty: true
+    environment:
+      TZ: "America/Denver"
+    dns:
+      - 192.168.0.12
+    ports:
+      - 3000:3000
+    volumes:
+      - ./config:/config
+      # - ./custom.css:/custom.css
+    restart: always
+    networks:
+      - traefik_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+      - "traefik.http.routers.immich-kiosk.rule=Host(`immich-kiosk.${MY_DOMAIN}`)"
+      #- "traefik.http.services.immich.loadbalancer.server.port=3001"
+      - "traefik.http.services.immich-kiosk.loadbalancer.server.port=3000"
+
+networks:
+  traefik_net:
+    external: true

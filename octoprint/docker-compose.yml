@@ -1,0 +1,26 @@
+version: '2.4'
+
+services:
+  octoprint:
+    container_name: octoprint
+    image: octoprint/octoprint
+    restart: unless-stopped
+    devices:
+      - /dev/ttyUSB2:/dev/ttyUSB2
+    volumes:
+     - ./octoprint:/octoprint
+    #environment:
+    #  - ENABLE_MJPG_STREAMER=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=$DEFAULT_NETWORK"
+      - "traefik.http.routers.octoprint.rule=Host(`octoprint.$MY_DOMAIN`)"
+      - "traefik.http.services.octoprint.loadbalancer.server.port=80"
+    networks:
+      - $DEFAULT_NETWORK
+
+networks:
+  traefik_net:
+    name: $DEFAULT_NETWORK
+    external: true
+
